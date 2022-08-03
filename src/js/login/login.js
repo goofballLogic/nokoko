@@ -10,7 +10,7 @@ export default function Login() {
         attribute: "class",
         messages: [accessTokenValidated, accessTokenRejected],
         mutate: (previousValue, message) => {
-            const values = (previousValue || "").split(" ").filter(x => x.trim());
+            let values = (previousValue || "").split(" ").filter(x => x.trim());
             if (message.type === accessTokenValidated) {
                 if (!values.includes("authenticated"))
                     values.push("authenticated");
@@ -32,20 +32,24 @@ export default function Login() {
     const loginElement = Element({
         tag: "ASIDE",
         className: "auth",
-        html: message => `
-
-            <div>${message.type === accessTokenValidated
-                ? `Authenticated as ${message.data.email}`
-                : "Not authenticated"
-            }</div>
-            <label>
-                <span class="text">Access token</span>
-                <input type="password" name="access-token" />
-            </label>
-
-        `,
-        mutationMessages: [elementContainerIsReady, accessTokenValidated],
+        html: message => message.type === accessTokenValidated
+            ? `
+                <div>Authenticated as ${message.data.email}</div>
+                <button class="cancel">Cancel</button>
+            `: `
+                <div>Not authenticated</div>
+                <label>
+                    <span class="text">Access token</span>
+                    <input type="password" name="access-token" />
+                </label>
+            `,
+        mutationMessages: [elementContainerIsReady, accessTokenValidated, accessTokenRejected],
         events: {
+            "click": e => {
+                if (e.target.className === "cancel") {
+                    receiver({ type: accessTokenRejected });
+                }
+            },
             "input": e => {
                 if (e.target.name === "access-token") {
                     receiver({
@@ -63,6 +67,7 @@ export default function Login() {
         stack.push(message);
         let next = stack.shift();
         while (next) {
+            console.log(next.type);
             const results = await Promise.all([
                 loginElement(next),
                 jsonFetcher(next),

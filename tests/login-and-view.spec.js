@@ -41,6 +41,23 @@ describe("Given a fake Noko API", () => {
 
       });
 
+      describe("but I cancel the token", () => {
+
+        beforeEach(async ({ page }) => {
+
+          await page.locator(`aside.auth button:has-text("Cancel")`).click();
+
+        });
+
+        test("Then it shows that I am unauthenticated again", async ({ page }) => {
+
+          await expect(page.locator("aside.auth")).toContainText("Not authenticated");
+          await expect(page.locator("body")).not.toHaveClass("authenticated");
+
+        });
+
+      });
+
     });
 
   });
