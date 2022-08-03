@@ -1,36 +1,49 @@
 const { test, test: { describe, beforeEach }, expect } = require('@playwright/test');
+const { installFakeNoko } = require('./fake-noko.js');
 
-describe("When I open the app", () => {
+describe("Given a fake Noko API", () => {
 
-  beforeEach(async ({ page }) => {
+  beforeEach(async ({ context }) => {
 
-    await page.goto("http://localhost:8080");
+    await installFakeNoko(context);
 
   });
 
-  test("Then it shows that I am not authenticated", async ({ page }) => {
+  describe("When I open the app", () => {
 
-    await expect(page.locator("aside.auth")).toHaveText("Not authenticated");
+    beforeEach(async ({ page }) => {
+
+      page.on("console", console.log.bind(console));
+      page.on("pageerror", console.error.bind(console));
+      await page.goto("http://localhost:8080");
+
+    });
+
+    test("Then it shows that I am not authenticated", async ({ page }) => {
+
+      await expect(page.locator("aside.auth")).toContainText("Not authenticated");
+      await expect(page.locator("body")).not.toHaveClass("authenticated");
+
+    });
+
+    describe("and I enter an API token", () => {
+
+      beforeEach(async ({ page }) => {
+
+        await page.locator("aside.auth").locator("text=Access token").fill(process.env["NOKO_PAT"]);
+
+      });
+
+      test("Then it shows that I am authenticated", async ({ page }) => {
+
+        await expect(page.locator("body")).toHaveClass("authenticated");
+        await expect(page.locator("aside.auth")).toContainText("Authenticated");
+
+      });
+
+    });
 
   });
 
 });
 
-//test.describe('homepage has Playwright in title and get started link linking to the intro page', async ({ page }) => {
-  // await page.goto('https://playwright.dev/');
-
-  //   // Expect a title "to contain" a substring.
-  //   await expect(page).toHaveTitle(/Playwright/);
-
-  //   // create a locator
-  //   const getStarted = page.locator('text=Get Started');
-
-  //   // Expect an attribute "to be strictly equal" to the value.
-  //   await expect(getStarted).toHaveAttribute('href', '/docs/intro');
-
-  //   // Click the get started link.
-  //   await getStarted.click();
-
-  //   // Expects the URL to contain intro.
-  //   await expect(page).toHaveURL(/.*intro/);
-//});
