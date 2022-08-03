@@ -1,5 +1,5 @@
 const { test, test: { describe, beforeEach }, expect } = require('@playwright/test');
-const { installFakeNoko } = require('./fake-noko.js');
+const { installFakeNoko, VALID_TOKEN } = require('./fake-noko.js');
 
 describe("Given a fake Noko API", () => {
 
@@ -30,7 +30,7 @@ describe("Given a fake Noko API", () => {
 
       beforeEach(async ({ page }) => {
 
-        await page.locator("aside.auth").locator("text=Access token").fill(process.env["NOKO_PAT"]);
+        await page.locator("aside.auth").locator("text=Access token").fill(VALID_TOKEN);
 
       });
 
