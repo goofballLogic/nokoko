@@ -1,7 +1,10 @@
+import { loadCSS } from "../css-loader.js";
 import AttributeMutator from "../lib/AttributeMutator.js";
 import Element from "../lib/Element.js";
 import JSONFetcher from "../lib/JSONFetcher.js";
 import { accessTokenEntered, accessTokenRejected, accessTokenValidated, elementContainerIsReady } from "../messages.js";
+
+loadCSS(import.meta.url);
 
 export default function Login() {
 
