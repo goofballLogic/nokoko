@@ -1,0 +1,25 @@
+{
+  "name": "nokoko",
+  "version": "1.0.0",
+  "description": "Better noko client",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "http-server src -c0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goofballLogic/nokoko.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/goofballLogic/nokoko/issues"
+  },
+  "homepage": "https://github.com/goofballLogic/nokoko#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.24.2"
+  }
+}
