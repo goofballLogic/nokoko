@@ -10,9 +10,11 @@ aside.auth::before {
     border-radius: 10px;
     display: inline-block;
     background-color: silver;
+    box-shadow: inset 0 0 10px 0 black;
 }
 .authenticated aside.auth::before {
-    background-color: greenyellow;
+    background: radial-gradient( white 20%, greenyellow 30%, green);
+    box-shadow: 0 0 10px 0 green;
 }
 aside.auth, aside.auth label {
     display: flex;

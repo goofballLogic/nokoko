@@ -41,6 +41,14 @@ describe("Given a fake Noko API", () => {
 
       });
 
+      test("And it lists summaries of previous week's entries", async ({ page }) => {
+
+        await page.screenshot({ path: "screenshot.png", fullPage: true });
+        await expect(page.locator(".entry-groups li:first-of-type summary")).toContainText("38 hours");
+        await expect(page.locator(".entry-groups li:last-of-type summary")).toContainText("32 hours");
+
+      });
+
       describe("but I cancel the token", () => {
 
         beforeEach(async ({ page }) => {
