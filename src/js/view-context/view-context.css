@@ -1,0 +1,15 @@
+.entry-groups {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 0 0 0;
+}
+
+.entry-groups details {
+    border: solid 1px silver;
+    background-color: #EEE;
+    padding: 10px;
+    overflow: auto;
+}

@@ -13,6 +13,13 @@ const userData = Symbol("Validated user data");
 const groupedEntries = Symbol("Grouped entries");
 const groupedEntriesTotals = Symbol("Totals of grouped entries");
 
+const groupEntryFormatter = new Intl.DateTimeFormat("en-GB", { dateStyle: "full" });
+function groupEntryDateFormat(dateString) {
+    const parts = groupEntryFormatter.formatToParts(new Date(dateString));
+    const partsHash = Object.fromEntries(parts.map(x => [x.type, x.value]));
+    return `${partsHash["month"]} ${partsHash["day"]}, ${partsHash["year"]}`;
+}
+
 export default function ViewContext() {
 
     return Outbound(send =>
@@ -29,7 +36,7 @@ export default function ViewContext() {
                     slot: userData,
                     inner:
                         JSONFetcher({
-                            url: message => `https://api.nokotime.com/v2/entries?user_ids=${message[userData].userId}&per_page=100`,
+                            url: message => `https://api.nokotime.com/v2/entries?user_ids=${message[userData].userId}&per_page=1000`,
                             activationMessage: accessTokenValidated,
                             headersHandler: (headers, message) => ({ ...headers, "X-NokoToken": message[userData].token }),
                             successMessage: entriesRetrieved
@@ -53,7 +60,7 @@ export default function ViewContext() {
                             <li>
                                 <details>
                                     <summary>
-                                        <span>${group[0]}</span>
+                                        <span>${groupEntryDateFormat(group[0])}</span>
                                         <span>${Number(group[groupedEntriesTotals] || "0") / 60} hours</span>
                                     </summary>
                                     ${JSON.stringify(group)}
