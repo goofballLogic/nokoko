@@ -3,6 +3,7 @@ import Login from "./login/login.js";
 import { elementContainerIsReady } from "./messages.js";
 import Receiver from "./lib/Receiver.js";
 import ViewContext from "./view-context/view-context.js";
+import Editing from "./editing/editing.js";
 
 loadCSS(import.meta.url);
 
@@ -17,6 +18,7 @@ export default async function main() {
         name: "Main",
         objects: [
             Login(),
+            Editing(),
             ViewContext(),
         ]
     });

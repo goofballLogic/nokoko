@@ -1,7 +1,7 @@
 const { test, test: { describe, beforeEach }, expect } = require('@playwright/test');
 const { installFakeNoko, VALID_TOKEN } = require('./fake-noko.js');
 
-describe("Given a fake Noko API", () => {
+describe("Background", () => {
 
   beforeEach(async ({ context }) => {
 
@@ -9,11 +9,10 @@ describe("Given a fake Noko API", () => {
 
   });
 
-  describe("When I open the app", () => {
+  describe("Given I open the app", () => {
 
     beforeEach(async ({ page }) => {
 
-      page.on("console", console.log.bind(console));
       page.on("pageerror", console.error.bind(console));
       await page.goto("http://localhost:8080");
 

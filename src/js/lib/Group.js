@@ -1,7 +1,6 @@
 export default function Group({
-    groupMessage,
-    groupsSlot, aggregate, aggregateSlot, groupBy,
-    inner
+    groupMessage, resultMessage,
+    groupsSlot, aggregate, aggregateSlot, groupBy
 }) {
 
     if (!groupBy) throw new Error("Missing groupBy function");
@@ -38,9 +37,13 @@ export default function Group({
 
             }
             message[groupsSlot] = entries;
+            return {
+                type: resultMessage,
+                data: message.data,
+                [groupsSlot]: entries
+            };
 
         }
-        return await inner(message);
 
     }
 

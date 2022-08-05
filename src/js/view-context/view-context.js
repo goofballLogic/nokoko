@@ -5,17 +5,23 @@ import MessageCache from "../lib/MessageCache.js";
 import Outbound from "../lib/Outbound.js";
 import Receiver from "../lib/Receiver.js";
 import Element from "../lib/Element.js";
-import { accessTokenRejected, accessTokenValidated, entriesRetrieved, summaryRendered } from "../messages.js";
+import Filter from "../lib/Filter.js";
+import Transform from "../lib/Transform.js";
+import {
+    accessTokenRejected, accessTokenValidated, entriesRetrieved, summaryRendered,
+    entriesGrouped, entriesGrouped_groupedEntries, entriesGrouped_groupedEntriesTotals, entriesGrouped_metadata
+} from "../messages.js";
 
 loadCSS(import.meta.url);
 
 const userData = Symbol("Validated user data");
-const groupedEntries = Symbol("Grouped entries");
-const groupedEntriesTotals = Symbol("Totals of grouped entries");
 
 const groupEntryFormatter = new Intl.DateTimeFormat("en-GB", { dateStyle: "full" });
-function groupEntryDateFormat(dateString) {
-    const parts = groupEntryFormatter.formatToParts(new Date(dateString));
+function groupEntryKeyDateFormat(dateString) {
+    return groupEntryDateFormat(new Date(dateString));
+}
+function groupEntryDateFormat(date) {
+    const parts = groupEntryFormatter.formatToParts(date);
     const partsHash = Object.fromEntries(parts.map(x => [x.type, x.value]));
     return `${partsHash["month"]} ${partsHash["day"]}, ${partsHash["year"]}`;
 }
@@ -56,34 +62,51 @@ export default function ViewContext() {
                     showMessages: [accessTokenValidated],
                     hideMessages: [summaryRendered, accessTokenRejected]
                 }),
-                Group({
-                    groupMessage: entriesRetrieved,
-                    invalidateMessages: [accessTokenRejected],
-                    groupBy: item => {
-                        const when = new Date(item.date);
-                        const zeroDay = new Date(when.getFullYear(), when.getMonth(), when.getDate() - when.getDay());
-                        return `${zeroDay.getFullYear()}-${(zeroDay.getMonth() + 1).leftPad("0", 2)}-${zeroDay.getDate().leftPad("0", 2)}`;
-                    },
-                    groupsSlot: groupedEntries,
-                    aggregate: items => items.map(x => x.minutes).reduce((x, y) => x + y),
-                    aggregateSlot: groupedEntriesTotals,
-                    inner: Element({
-                        tag: "OL",
-                        className: "entry-groups",
-                        mutationMessages: [entriesRetrieved, accessTokenRejected],
-                        postMutationMessage: summaryRendered,
-                        html: message => message[groupedEntries]?.map(group => `
-                            <li>
-                                <details>
-                                    <summary>
-                                        <span>${groupEntryDateFormat(group[0])}</span>
-                                        <span>${Number(group[groupedEntriesTotals] || "0") / 60} hours</span>
-                                    </summary>
-                                    ${JSON.stringify(group)}
-                                </details>
-                            </li>
-                        `).join("\n")
-                    })
+                Transform({
+                    inner: Group({
+                        groupMessage: entriesRetrieved,
+                        groupBy: item => {
+                            const when = new Date(item.date);
+                            const zeroDay = new Date(when.getFullYear(), when.getMonth(), when.getDate() - when.getDay());
+                            return `${zeroDay.getFullYear()}-${(zeroDay.getMonth() + 1).leftPad("0", 2)}-${zeroDay.getDate().leftPad("0", 2)}`;
+                        },
+                        groupsSlot: entriesGrouped_groupedEntries,
+                        aggregate: items => items.map(x => x.minutes).reduce((x, y) => x + y),
+                        aggregateSlot: entriesGrouped_groupedEntriesTotals,
+                        resultMessage: entriesGrouped,
+                    }),
+                    transformMessages: [entriesGrouped],
+                    after: message => {
+                        console.log(message);
+                        const when = new Date(message[entriesGrouped_groupedEntries][0][0]);
+                        const nextWeek = new Date(when.getFullYear(), when.getMonth(), when.getDate() + 7);
+                        message[entriesGrouped_metadata] = {
+                            nextWeek,
+                            nextWeekText: groupEntryDateFormat(nextWeek)
+                        };
+                        return message;
+                    }
+                }),
+                Element({
+                    tag: "OL",
+                    className: "entry-groups",
+                    mutationMessages: [entriesGrouped, accessTokenRejected],
+                    postMutationMessage: summaryRendered,
+                    html: message => message[entriesGrouped_groupedEntries]?.map(group => `
+                        <li>
+                            <details>
+                                <summary>
+                                    <span>${groupEntryKeyDateFormat(group[0])}</span>
+                                    <span>${Number(group[entriesGrouped_groupedEntriesTotals] || "0") / 60} hours</span>
+                                </summary>
+                                ${JSON.stringify(group)}
+                            </details>
+                        </li>
+                    `).join("\n")
+                }),
+                Filter({
+                    messages: [entriesGrouped],
+                    outbound: send
                 })
             ]
         })
