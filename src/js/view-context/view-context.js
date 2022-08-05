@@ -58,6 +58,7 @@ export default function ViewContext() {
                 }),
                 Group({
                     groupMessage: entriesRetrieved,
+                    invalidateMessages: [accessTokenRejected],
                     groupBy: item => {
                         const when = new Date(item.date);
                         const zeroDay = new Date(when.getFullYear(), when.getMonth(), when.getDate() - when.getDay());
@@ -69,9 +70,9 @@ export default function ViewContext() {
                     inner: Element({
                         tag: "OL",
                         className: "entry-groups",
-                        mutationMessages: [entriesRetrieved],
+                        mutationMessages: [entriesRetrieved, accessTokenRejected],
                         postMutationMessage: summaryRendered,
-                        html: message => message[groupedEntries].map(group => `
+                        html: message => message[groupedEntries]?.map(group => `
                             <li>
                                 <details>
                                     <summary>

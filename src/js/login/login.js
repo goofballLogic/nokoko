@@ -72,7 +72,7 @@ export default function Login() {
                     }
                 }),
                 Filter({
-                    messages: [accessTokenValidated],
+                    messages: [accessTokenValidated, accessTokenRejected],
                     outbound: message => send(message)
                 })
             ]

@@ -1,4 +1,8 @@
-export default function Group({ groupMessage, groupsSlot, aggregate, aggregateSlot, groupBy, inner }) {
+export default function Group({
+    groupMessage,
+    groupsSlot, aggregate, aggregateSlot, groupBy,
+    inner
+}) {
 
     if (!groupBy) throw new Error("Missing groupBy function");
     if (!groupsSlot) throw new Error("Missing slot for grouping");

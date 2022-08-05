@@ -43,7 +43,6 @@ describe("Given a fake Noko API", () => {
 
       test("And it lists summaries of previous week's entries", async ({ page }) => {
 
-        await page.screenshot({ path: "screenshot.png", fullPage: true });
         await expect(page.locator(".entry-groups li:first-of-type summary")).toContainText("July 24, 2022");
         await expect(page.locator(".entry-groups li:first-of-type summary")).toContainText("38 hours");
         await expect(page.locator(".entry-groups li:last-of-type summary")).toContainText("May 15, 2022");
@@ -63,6 +62,12 @@ describe("Given a fake Noko API", () => {
 
           await expect(page.locator("aside.auth")).toContainText("Not authenticated");
           await expect(page.locator("body")).not.toHaveClass("authenticated");
+
+        });
+
+        test("And the list of summaries is removed", async ({ page }) => {
+
+          await expect(page.locator(".entry-groups li")).not.toBeVisible();
 
         });
 

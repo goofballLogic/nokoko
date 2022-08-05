@@ -25,7 +25,7 @@ export default function Element({
         let wasMutated = false;
         if (isDynamicHTML && mutationMessages && mutationMessages.includes(message.type)) {
             let previousHTML = el.innerHTML;
-            el.innerHTML = html(message);
+            el.innerHTML = html(message) || "";
             wasMutated = previousHTML !== el.innerHTML;
         }
         if (message.type === elementContainerIsReady) {
