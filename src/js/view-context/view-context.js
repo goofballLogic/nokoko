@@ -5,7 +5,7 @@ import MessageCache from "../lib/MessageCache.js";
 import Outbound from "../lib/Outbound.js";
 import Receiver from "../lib/Receiver.js";
 import Element from "../lib/Element.js";
-import { accessTokenValidated, entriesRetrieved } from "../messages.js";
+import { accessTokenRejected, accessTokenValidated, entriesRetrieved, summaryRendered } from "../messages.js";
 
 loadCSS(import.meta.url);
 
@@ -42,6 +42,20 @@ export default function ViewContext() {
                             successMessage: entriesRetrieved
                         })
                 }),
+                Element({
+                    tag: "DIV",
+                    html: `
+                        Entries loading
+                        <div class="spinner">
+                            <div class="bounce1"></div>
+                            <div class="bounce2"></div>
+                            <div class="bounce3"></div>
+                        </div>
+                    `,
+                    className: "entry-groups-loading",
+                    showMessages: [accessTokenValidated],
+                    hideMessages: [summaryRendered, accessTokenRejected]
+                }),
                 Group({
                     groupMessage: entriesRetrieved,
                     groupBy: item => {
@@ -56,6 +70,7 @@ export default function ViewContext() {
                         tag: "OL",
                         className: "entry-groups",
                         mutationMessages: [entriesRetrieved],
+                        postMutationMessage: summaryRendered,
                         html: message => message[groupedEntries].map(group => `
                             <li>
                                 <details>
