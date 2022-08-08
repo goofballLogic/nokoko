@@ -23,7 +23,16 @@ describe("Background", () => {
 
             await page.screenshot({ path: "screenshot.png" });
             await expect(page.locator("h3")).toContainText("July 31, 2022");
-
+            /*
+                The entry table should contain a row per project found over the last 3 weeks of entries
+            */
+            /*
+            await expect(page.locator("section[data-project=31234567]")).toBeVisible();
+            await expect(page.locator("section[data-project=31234568]")).toBeVisible();
+            await expect(page.locator("section[data-project=31234569]")).toBeVisible();
+            await expect(page.locator("section[data-project=31234570]")).not.toBeVisible();
+            await expect(page.locator("section[data-project=31234571]")).not.toBeVisible();
+            */
         });
 
     })

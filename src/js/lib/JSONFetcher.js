@@ -14,7 +14,16 @@ export default function JSONFetcher({
         if (message.type === activationMessage) {
 
             const headers = headersHandler({}, message);
-            const resolvedUrl = typeof url === "function" ? url(message) : url;
+            let resolvedUrl = typeof url === "function" ? url(message) : url;
+            if (document.location.search.includes("data=example"))
+                resolvedUrl = resolvedUrl.includes("entries")
+                    ? "/example_data/entries.json"
+                    : resolvedUrl.includes("projects")
+                        ? "/example_data/projects.json"
+                        : resolvedUrl.includes("/current_user")
+                            ? "/example_data/current_user.json"
+                            : resolvedUrl;
+
             const resp = await fetch(resolvedUrl, { method, headers });
 
             let caught;

@@ -25,7 +25,7 @@ describe("Background", () => {
 
     });
 
-    describe("and I enter an API token", () => {
+    describe("When I enter an API token", () => {
 
       beforeEach(async ({ page }) => {
 
@@ -40,7 +40,7 @@ describe("Background", () => {
 
       });
 
-      test("And it lists summaries of previous week's entries", async ({ page }) => {
+      test("Then it lists summaries of previous week's entries", async ({ page }) => {
 
         await expect(page.locator(".entry-groups li:first-of-type summary")).toContainText("July 24, 2022");
         await expect(page.locator(".entry-groups li:first-of-type summary")).toContainText("38 hours");
@@ -64,7 +64,7 @@ describe("Background", () => {
 
         });
 
-        test("And the list of summaries is removed", async ({ page }) => {
+        test("Then the list of summaries is removed", async ({ page }) => {
 
           await expect(page.locator(".entry-groups li")).not.toBeVisible();
 

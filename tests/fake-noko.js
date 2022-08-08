@@ -27,6 +27,14 @@ const data = {
         C: {
             id: 31234569,
             name: "Project C"
+        },
+        D: {
+            id: 31234570,
+            name: "Project D"
+        },
+        E: {
+            id: 31234571,
+            name: "Project E"
         }
     }
 };
@@ -41,7 +49,7 @@ data.SOME_ENTRIES = [
     fakeEntry("2022-07-28", 5, data.PROJECTS.A),
     fakeEntry("2022-07-28", 4, data.PROJECTS.B),
     fakeEntry("2022-07-27", 7, data.PROJECTS.A),
-    fakeEntry("2022-07-27", 8, data.PROJECTS.B),
+    fakeEntry("2022-07-27", 8, data.PROJECTS.C),
     fakeEntry("2022-07-26", 4, data.PROJECTS.A),
 
     /* June 19th 2022 */
@@ -52,7 +60,7 @@ data.SOME_ENTRIES = [
 
     /* May 22nd 2022 */
     fakeEntry("2022-05-23", 6, data.PROJECTS.B),
-    fakeEntry("2022-05-22", 4, data.PROJECTS.A),
+    fakeEntry("2022-05-22", 4, data.PROJECTS.C),
 
     /* May 15th 2022 */
     fakeEntry("2022-05-21", 5, data.PROJECTS.B),
