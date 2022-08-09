@@ -11,3 +11,8 @@
     text-align: center;
     padding: 10px;
 }
+
+.edit-main select {
+    padding: 10px;
+    border-color: #EEE;
+}

@@ -1,7 +1,7 @@
 [
     {
         "id": 211498,
-        "name": "Some project",
+        "name": "Project Simply",
         "description": "Used for all ak admin tasks",
         "billing_increment": 30,
         "enabled": true,
@@ -11,7 +11,7 @@
         "updated_at": "2022-08-01T12:34:14Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Simply",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 2813760,
@@ -616,7 +616,7 @@
     },
     {
         "id": 211497,
-        "name": "Some project",
+        "name": "Project Sense",
         "description": "",
         "billing_increment": 60,
         "enabled": true,
@@ -626,7 +626,7 @@
         "updated_at": "2022-08-02T16:33:51Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Sense",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 1446660,
@@ -1383,7 +1383,7 @@
     },
     {
         "id": 346349,
-        "name": "Some project",
+        "name": "Project Onlinetools",
         "description": "",
         "billing_increment": 30,
         "enabled": true,
@@ -1393,7 +1393,7 @@
         "updated_at": "2022-07-29T08:35:21Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Onlinetools",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 356490,
@@ -1582,7 +1582,7 @@
     },
     {
         "id": 513800,
-        "name": "Some project",
+        "name": "Project Cell",
         "description": "",
         "billing_increment": 60,
         "enabled": true,
@@ -1592,7 +1592,7 @@
         "updated_at": "2022-07-28T16:26:55Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Cell",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 35280,
@@ -1773,7 +1773,7 @@
     },
     {
         "id": 582852,
-        "name": "Some project",
+        "name": "Project Heart",
         "description": "",
         "billing_increment": 60,
         "enabled": false,
@@ -1783,7 +1783,7 @@
         "updated_at": "2021-12-09T11:06:20Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Heart",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 9300,
@@ -1852,7 +1852,7 @@
     },
     {
         "id": 603670,
-        "name": "Some project",
+        "name": "Project Spin",
         "description": "",
         "billing_increment": 5,
         "enabled": true,
@@ -1862,7 +1862,7 @@
         "updated_at": "2022-07-29T13:11:38Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Spin",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 256575,
@@ -2315,7 +2315,7 @@
     },
     {
         "id": 609863,
-        "name": "Some project",
+        "name": "Project Speed",
         "description": "",
         "billing_increment": 5,
         "enabled": true,
@@ -2325,7 +2325,7 @@
         "updated_at": "2022-07-29T15:24:12Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Speed",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 300000,
@@ -2482,7 +2482,7 @@
     },
     {
         "id": 620570,
-        "name": "Some project",
+        "name": "Project Dollar",
         "description": "",
         "billing_increment": 5,
         "enabled": true,
@@ -2492,7 +2492,7 @@
         "updated_at": "2022-08-01T08:19:12Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Dollar",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 308450,
@@ -2697,7 +2697,7 @@
     },
     {
         "id": 655276,
-        "name": "Some project",
+        "name": "Project Nearby",
         "description": null,
         "billing_increment": 60,
         "enabled": true,
@@ -2707,7 +2707,7 @@
         "updated_at": "2022-07-11T15:54:48Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Nearby",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 960,
@@ -2744,7 +2744,7 @@
     },
     {
         "id": 321604,
-        "name": "Some project",
+        "name": "Project Pig",
         "description": null,
         "billing_increment": 60,
         "enabled": true,
@@ -2754,7 +2754,7 @@
         "updated_at": "2022-08-02T16:28:32Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Pig",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 439380,
@@ -3463,7 +3463,7 @@
     },
     {
         "id": 639426,
-        "name": "Some project",
+        "name": "Project Value",
         "description": "",
         "billing_increment": 5,
         "enabled": true,
@@ -3473,7 +3473,7 @@
         "updated_at": "2022-07-27T07:35:41Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Value",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 14310,
@@ -3582,7 +3582,7 @@
     },
     {
         "id": 396664,
-        "name": "Some project",
+        "name": "Project Stone",
         "description": "",
         "billing_increment": 60,
         "enabled": true,
@@ -3592,7 +3592,7 @@
         "updated_at": "2022-07-27T09:33:36Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Stone",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 600540,
@@ -3773,7 +3773,7 @@
     },
     {
         "id": 423256,
-        "name": "Some project",
+        "name": "Project Soap",
         "description": "",
         "billing_increment": 60,
         "enabled": true,
@@ -3783,7 +3783,7 @@
         "updated_at": "2022-07-29T09:45:54Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Soap",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 237420,
@@ -4380,7 +4380,7 @@
     },
     {
         "id": 637238,
-        "name": "Some project",
+        "name": "Project Shallow",
         "description": "",
         "billing_increment": 5,
         "enabled": true,
@@ -4390,7 +4390,7 @@
         "updated_at": "2022-07-15T13:06:42Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Shallow",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 52140,
@@ -4483,7 +4483,7 @@
     },
     {
         "id": 394173,
-        "name": "Some project",
+        "name": "Project Cross",
         "description": "",
         "billing_increment": 5,
         "enabled": true,
@@ -4493,7 +4493,7 @@
         "updated_at": "2022-07-25T15:05:33Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Cross",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 978465,
@@ -5114,7 +5114,7 @@
     },
     {
         "id": 495682,
-        "name": "Some project",
+        "name": "Project Slabs",
         "description": null,
         "billing_increment": 60,
         "enabled": true,
@@ -5124,7 +5124,7 @@
         "updated_at": "2022-06-27T11:47:06Z",
         "group": {
             "id": 8416,
-            "name": "Some project",
+            "name": "Project Slabs",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=8416,%20name=%22Ak%22%3E"
         },
         "minutes": 7740,
@@ -5217,7 +5217,7 @@
     },
     {
         "id": 654891,
-        "name": "Some project",
+        "name": "Project Surprise",
         "description": null,
         "billing_increment": 60,
         "enabled": true,
@@ -5227,7 +5227,7 @@
         "updated_at": "2022-07-01T09:51:32Z",
         "group": {
             "id": 33705,
-            "name": "Some project",
+            "name": "Project Surprise",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=33705,%20name=%22Experian%22%3E"
         },
         "minutes": 2880,
@@ -5272,7 +5272,7 @@
     },
     {
         "id": 654892,
-        "name": "Some project",
+        "name": "Project Impossible",
         "description": "",
         "billing_increment": 5,
         "enabled": true,
@@ -5282,7 +5282,7 @@
         "updated_at": "2022-07-29T15:22:49Z",
         "group": {
             "id": 33705,
-            "name": "Some project",
+            "name": "Project Impossible",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=33705,%20name=%22Experian%22%3E"
         },
         "minutes": 1680,
@@ -5319,7 +5319,7 @@
     },
     {
         "id": 658432,
-        "name": "Some project",
+        "name": "Project Region",
         "description": "",
         "billing_increment": 5,
         "enabled": true,
@@ -5329,7 +5329,7 @@
         "updated_at": "2022-08-01T14:29:07Z",
         "group": {
             "id": 33906,
-            "name": "Some project",
+            "name": "Project Region",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=33906,%20name=%22Feefo%22%3E"
         },
         "minutes": 1410,
@@ -5382,7 +5382,7 @@
     },
     {
         "id": 658433,
-        "name": "Some project",
+        "name": "Project Science",
         "description": null,
         "billing_increment": 60,
         "enabled": true,
@@ -5392,7 +5392,7 @@
         "updated_at": "2022-07-29T14:03:51Z",
         "group": {
             "id": 33906,
-            "name": "Some project",
+            "name": "Project Science",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=33906,%20name=%22Feefo%22%3E"
         },
         "minutes": 1440,
@@ -5429,7 +5429,7 @@
     },
     {
         "id": 636893,
-        "name": "Some project",
+        "name": "Project Reason",
         "description": null,
         "billing_increment": 60,
         "enabled": false,
@@ -5439,7 +5439,7 @@
         "updated_at": "2022-01-27T14:15:34Z",
         "group": {
             "id": 27505,
-            "name": "Some project",
+            "name": "Project Reason",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=27505,%20name=%22Fidelity%22%3E"
         },
         "minutes": 19800,
@@ -5500,7 +5500,7 @@
     },
     {
         "id": 636894,
-        "name": "Some project",
+        "name": "Project Voice",
         "description": "",
         "billing_increment": 5,
         "enabled": false,
@@ -5510,7 +5510,7 @@
         "updated_at": "2022-01-27T14:15:39Z",
         "group": {
             "id": 27505,
-            "name": "Some project",
+            "name": "Project Voice",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=27505,%20name=%22Fidelity%22%3E"
         },
         "minutes": 35895,
@@ -5603,7 +5603,7 @@
     },
     {
         "id": 658720,
-        "name": "Some project",
+        "name": "Project Season",
         "description": null,
         "billing_increment": 60,
         "enabled": true,
@@ -5613,7 +5613,7 @@
         "updated_at": "2022-07-25T08:14:01Z",
         "group": {
             "id": 33919,
-            "name": "Some project",
+            "name": "Project Season",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=33919,%20name=%22Global%22%3E"
         },
         "minutes": 60,
@@ -5642,7 +5642,7 @@
     },
     {
         "id": 658721,
-        "name": "Some project",
+        "name": "Project Chair",
         "description": "",
         "billing_increment": 5,
         "enabled": true,
@@ -5652,7 +5652,7 @@
         "updated_at": "2022-07-25T08:10:10Z",
         "group": {
             "id": 33919,
-            "name": "Some project",
+            "name": "Project Chair",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=33919,%20name=%22Global%22%3E"
         },
         "minutes": 0,
@@ -5672,7 +5672,7 @@
     },
     {
         "id": 654894,
-        "name": "Some project",
+        "name": "Project Bad",
         "description": null,
         "billing_increment": 60,
         "enabled": true,
@@ -5682,7 +5682,7 @@
         "updated_at": "2022-07-29T14:05:05Z",
         "group": {
             "id": 29885,
-            "name": "Some project",
+            "name": "Project Bad",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=29885,%20name=%22News%20UK%22%3E"
         },
         "minutes": 8820,
@@ -5727,7 +5727,7 @@
     },
     {
         "id": 654893,
-        "name": "Some project",
+        "name": "Project Sleep",
         "description": "",
         "billing_increment": 5,
         "enabled": true,
@@ -5737,7 +5737,7 @@
         "updated_at": "2022-07-29T15:19:03Z",
         "group": {
             "id": 29885,
-            "name": "Some project",
+            "name": "Project Sleep",
             "url": "https://api.nokotime.com/v2/project_groups/%23%3COpenStruct%20id=29885,%20name=%22News%20UK%22%3E"
         },
         "minutes": 6180,
