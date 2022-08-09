@@ -33,20 +33,11 @@ export default function ViewContext() {
         Receiver({
             name: "View/Context",
             objects: [
-                MessageCache({
-                    cacheMessage: accessTokenValidated,
-                    extract: message => ({
-                        token: message.data?.token,
-                        userId: message.data.id
-                    }),
-                    slot: userData,
-                    inner:
-                        JSONFetcher({
-                            url: message => `https://api.nokotime.com/v2/entries?user_ids=${message[userData].userId}&per_page=1000`,
-                            activationMessage: accessTokenValidated,
-                            headersHandler: (headers, message) => ({ ...headers, "X-NokoToken": message[userData].token }),
-                            successMessage: entriesRetrieved
-                        })
+                JSONFetcher({
+                    url: message => `https://api.nokotime.com/v2/entries?user_ids=${message.data?.id}&per_page=1000`,
+                    activationMessage: accessTokenValidated,
+                    headersHandler: (headers, message) => ({ ...headers, "X-NokoToken": message.data?.token }),
+                    successMessage: entriesRetrieved
                 }),
                 Element({
                     tag: "DIV",
@@ -77,12 +68,13 @@ export default function ViewContext() {
                     }),
                     transformMessages: [entriesGrouped],
                     after: message => {
-                        console.log(message);
+                        const whenCode = message[entriesGrouped_groupedEntries][0][0];
                         const when = new Date(message[entriesGrouped_groupedEntries][0][0]);
                         const nextWeek = new Date(when.getFullYear(), when.getMonth(), when.getDate() + 7);
                         message[entriesGrouped_metadata] = {
                             nextWeek,
-                            nextWeekText: groupEntryDateFormat(nextWeek)
+                            nextWeekText: groupEntryDateFormat(nextWeek),
+                            nextWeekCode: whenCode
                         };
                         return message;
                     }

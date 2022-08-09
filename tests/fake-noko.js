@@ -104,6 +104,13 @@ function fakeNoko(request, route) {
                 });
                 break;
 
+            case "/v2/projects":
+                route.fulfill({
+                    body: JSON.stringify(Object.values(data.PROJECTS)),
+                    status: 200
+                });
+                break;
+
             default:
                 console.warn("Not found", url);
                 route.fulfill({

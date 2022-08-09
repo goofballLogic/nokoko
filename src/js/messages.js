@@ -8,4 +8,4 @@ export const entriesGrouped_groupedEntries = Symbol("Grouped entries");
 export const entriesGrouped_groupedEntriesTotals = Symbol("Totals of grouped entries");
 export const entriesGrouped_metadata = Symbol("Metadata about grouped entries");
 export const summaryRendered = Symbol("Summary rendered");
-
+export const entrySlotsRendered = Symbol("Entry slots rendered");
