@@ -3,6 +3,10 @@
     font-family: "proxima-nova","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+body > :not(aside.auth) {
+  max-width: 1500px;
+  margin: auto;
+}
 
 .spinner {
     margin: 10px auto;

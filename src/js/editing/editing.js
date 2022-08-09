@@ -110,22 +110,38 @@ export default () =>
                         `;
 
                         const projectSection = (selectedProjectId, className) => `
-                            <section${selectedProjectId ? ` data-projectid="${selectedProjectId}"` : ""}${className ? ` class=${className}` : ""}>
-                                <select>
-                                    <option></option>
-                                    ${projects.map(p => projectOption(p, selectedProjectId))}
-                                </select>
-                            </section>
+                            <tr${selectedProjectId ? ` data-projectid="${selectedProjectId}"` : ""}${className ? ` class=${className}` : ""}>
+                                <td>
+                                    <select>
+                                        <option></option>
+                                        ${projects.map(p => projectOption(p, selectedProjectId))}
+                                    </select>
+                                </td>
+                            </tr>
                         `;
 
                         return `
                             <article class="edit-main">
                                 <h3>Week beginning ${entryGroupMetadata.nextWeekText}</h3>
-                                <section class="headings">
-                                    <div></div><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div></div>
-                                </section>
-                                ${Array.from(lookbackProjectIds.keys()).map(projectSection).join("\n")}
-                                ${projectSection(null, "new")}
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Sun</th>
+                                            <th>Mon</th>
+                                            <th>Tue</th>
+                                            <th>Wed</th>
+                                            <th>Thu</th>
+                                            <th>Fri</th>
+                                            <th>Sat</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${Array.from(lookbackProjectIds.keys()).map(projectSection).join("\n")}
+                                        ${projectSection(null, "new")}
+                                    </tbody>
+                                </table>
                             </article>
                         `;
                     },

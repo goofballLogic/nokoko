@@ -3,16 +3,24 @@
     text-align: center;
 }
 
-.edit-main .headings {
-    display: flex;
+.edit-main table {
+    border-spacing: 0;
+    margin: 20px 0;
 }
-.edit-main .headings div {
-    flex: 1;
+
+.edit-main th {
+    font-weight: normal;
     text-align: center;
-    padding: 10px;
+    padding: 0;
+    min-width: 100px;
+}
+
+.edit-main td {
+    padding: 0;
 }
 
 .edit-main select {
     padding: 10px;
+    min-width: 100px;
     border-color: #EEE;
 }
