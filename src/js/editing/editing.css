@@ -3,24 +3,28 @@
     text-align: center;
 }
 
-.edit-main table {
+.time-entry table {
     border-spacing: 0;
     margin: 20px 0;
 }
 
-.edit-main th {
+.time-entry th {
     font-weight: normal;
     text-align: center;
     padding: 0;
     min-width: 100px;
+    border: solid 1px #EEE;
 }
 
-.edit-main td {
+.time-entry td {
     padding: 0;
+    border: solid 1px #EEE;
 }
 
-.edit-main select {
-    padding: 10px;
+.time-entry select, .time-entry input[type=number] {
     min-width: 100px;
-    border-color: #EEE;
+    border: none;
+    text-align: center;
+    line-height: 30px;
+    height: 30px;
 }

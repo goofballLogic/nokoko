@@ -15,7 +15,7 @@ export default function Element({
 
     if (events)
         for (const eventName in events) {
-            el.addEventListener(eventName, events[eventName]);
+            el.addEventListener(eventName, e => events[eventName](e, el));
         }
 
     if (showMessages) {

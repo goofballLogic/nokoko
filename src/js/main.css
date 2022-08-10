@@ -3,6 +3,10 @@
     font-family: "proxima-nova","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body > :not(aside.auth) {
   max-width: 1500px;
   margin: auto;

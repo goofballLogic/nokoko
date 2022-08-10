@@ -79,71 +79,97 @@ export default () =>
                     mutationMessages: [entriesGrouped_and_entryGroupLookbacksCalculated_and_projectsRetrieved],
                     html: message => {
 
-                        const entryGroups = message.data[entriesGrouped];
-                        const entryGroupMetadata = entryGroups[entriesGrouped_metadata];
+                        const entryGroupsMessage = message.data[entriesGrouped];
+                        const entryGroupMetadata = entryGroupsMessage[entriesGrouped_metadata];
+                        const groupedEntries = entryGroupsMessage[entriesGrouped_groupedEntries];
                         const entryGroupLookbacks = message.data[entryGroupLookbacksCalculated]?.data;
                         const editWeekCode = entryGroupMetadata.nextWeekCode;
+                        const editWeek = entryGroupMetadata.nextWeek;
                         const projects = message.data[projectsRetrieved]?.data;
 
-                        let lookbackProjectIds;
+                        let editProjectIds;
+                        let editGroup;
                         for (const [lookbackWhenCode, lookback] of entryGroupLookbacks.entries()) {
 
                             if (editWeekCode >= lookbackWhenCode) {
-                                // ahead of (or equal to) this entry
-                                lookbackProjectIds = lookback;
+                                editProjectIds = lookback;
+                                [, editGroup] = groupedEntries.find(([groupWhenCode]) => lookbackWhenCode === groupWhenCode) || [];
                                 break;
                             }
+
                         }
+                        editProjectIds = editProjectIds || new Map();
+                        editGroup = editGroup || [];
 
-                        console.log(message);
-                        console.log(lookbackProjectIds);
-
-                        console.log(projects);
-
-                        const lookbackProjects = Array.from(lookbackProjectIds.keys()).map(pid => projects.find(p => p.id === pid));
-                        console.log(lookbackProjects);
 
                         const projectOption = (project, selectedProjectId) => `
-                            <option value="${project.id}"${project.id === selectedProjectId ? " selected" : ""}>
+                            <option value="${project.id}"${project.id === selectedProjectId ? " selected" :
+                                editProjectIds.has(project.id) ? " disabled" : ""}>
                                 ${htmlEncode(project.name)}
                             </option>
                         `;
 
+                        const offsetDate = offset => {
+                            const when = new Date(editWeek.getFullYear(), editWeek.getMonth(), editWeek.getDate() + offset);
+                            return `${when.getFullYear()}-${(when.getMonth() + 1).leftPad("0", 2)}-${when.getDate().leftPad("0", 2)}`;
+                        }
+
+                        const nameFor = (projectId, dateOffset) => `${projectId}_${offsetDate(dateOffset)}`;
+
+                        const valueFor = (projectId, dateOffset) => {
+
+                            // const whenCode = offsetDate(dateOffset);
+                            // const found = editGroup.filter(e => e.date === whenCode && e.project.id === projectId);
+
+                        }
+
                         const projectSection = (selectedProjectId, className) => `
                             <tr${selectedProjectId ? ` data-projectid="${selectedProjectId}"` : ""}${className ? ` class=${className}` : ""}>
                                 <td>
-                                    <select>
+                                    <select name="project">
                                         <option></option>
-                                        ${projects.map(p => projectOption(p, selectedProjectId))}
+                                        ${projects.map(p => projectOption(p, selectedProjectId)).join("\n")}
                                     </select>
                                 </td>
+                                ${Array.from("0123456").map((_, i) => `
+                                    <td>
+                                        <input type="number" min="0" max="24" name="${nameFor(selectedProjectId, i)}" value="${valueFor(selectedProjectId, i) || ""}">
+                                    </td>
+                                `).join("\n")}
                             </tr>
                         `;
 
                         return `
-                            <article class="edit-main">
-                                <h3>Week beginning ${entryGroupMetadata.nextWeekText}</h3>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Sun</th>
-                                            <th>Mon</th>
-                                            <th>Tue</th>
-                                            <th>Wed</th>
-                                            <th>Thu</th>
-                                            <th>Fri</th>
-                                            <th>Sat</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${Array.from(lookbackProjectIds.keys()).map(projectSection).join("\n")}
-                                        ${projectSection(null, "new")}
-                                    </tbody>
-                                </table>
-                            </article>
+                            <h3>Week beginning ${entryGroupMetadata.nextWeekText}</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th></th><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${Array.from(editProjectIds.keys()).map(projectSection).join("\n")}
+                                    ${projectSection("new", "new")}
+                                </tbody>
+                            </table>
                         `;
+
+                    },
+                    events: {
+                        "change": (e, form) => {
+                            if (e.target.tagName === "SELECT") {
+                                const selectedProjectId = e.target.value;
+                                let row = e.target;
+                                while (row.tagName !== "TR") row = row.parentElement;
+                                const previouslySelectedProjectId = row.dataset.projectid;
+                                for (let r of form.querySelectorAll("TR")) {
+                                    if (r === row) continue;
+                                    r.querySelector(`OPTION[value="${previouslySelectedProjectId}"]`)?.removeAttribute("disabled");
+                                    r.querySelector(`OPTION[value="${selectedProjectId}"]`)?.setAttribute("disabled", "");
+                                }
+                                row.dataset.projectid = selectedProjectId;
+                            }
+                        }
                     },
                     postMutationMessage: entrySlotsRendered,
                 })
