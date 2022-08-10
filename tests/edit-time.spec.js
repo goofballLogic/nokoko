@@ -26,7 +26,7 @@ describe("Background", () => {
             test("with a column heading for each day of the week", async ({ page }) => {
 
                 const headings = await page.locator(`form.time-entry`).evaluate(h => Array.from(h.querySelectorAll("th")).map(d => d.textContent.trim()));
-                expect(headings).toEqual(["", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", ""]);
+                expect(headings).toEqual(["", "Sun 31st", "Mon 1st", "Tue 2nd", "Wed 3rd", "Thu 4th", "Fri 5th", "Sat 6th"]);
 
             });
 
@@ -112,6 +112,23 @@ describe("Background", () => {
             test("Then the deselected project is now enabled for other rows", async ({ page }) => {
 
                 await expect(page.locator(`form.time-entry tr[data-projectid="31234568"] select option[value="31234567"]`)).not.toBeDisabled();
+
+            });
+
+            test("Then the input names change to match the new proejct", async ({ page }) => {
+
+                const inputs = await page
+                    .locator(`form.time-entry table`)
+                    .evaluate(table => Array.from(table.querySelectorAll("input[type=number]")).map(input => [input.name, input.value]));
+
+                expect(inputs).toEqual([
+
+                    ["31234570_2022-07-31", ""], ["31234570_2022-08-01", ""], ["31234570_2022-08-02", ""], ["31234570_2022-08-03", ""], ["31234570_2022-08-04", ""], ["31234570_2022-08-05", ""], ["31234570_2022-08-06", ""],
+                    ["31234568_2022-07-31", ""], ["31234568_2022-08-01", ""], ["31234568_2022-08-02", ""], ["31234568_2022-08-03", ""], ["31234568_2022-08-04", ""], ["31234568_2022-08-05", ""], ["31234568_2022-08-06", ""],
+                    ["31234569_2022-07-31", ""], ["31234569_2022-08-01", ""], ["31234569_2022-08-02", ""], ["31234569_2022-08-03", ""], ["31234569_2022-08-04", ""], ["31234569_2022-08-05", ""], ["31234569_2022-08-06", ""],
+                    ["new_2022-07-31", ""], ["new_2022-08-01", ""], ["new_2022-08-02", ""], ["new_2022-08-03", ""], ["new_2022-08-04", ""], ["new_2022-08-05", ""], ["new_2022-08-06", ""],
+
+                ]);
 
             });
 

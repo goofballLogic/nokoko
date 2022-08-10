@@ -139,12 +139,23 @@ export default () =>
                             </tr>
                         `;
 
+                        const ordinals = { "1": "st", "2": "nd", "3": "rd" };
+                        const headingOffset = index => {
+                            const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                            const working = new Date(editWeek.getFullYear(), editWeek.getMonth(), editWeek.getDate() + index);
+                            const digit = working.getDate();
+                            const trailingDigit = digit.toString()[1] || digit.toString()[0];
+                            const postfix = ordinals[trailingDigit] || "th";
+                            return `${days[index]} ${working.getDate()}${postfix}`;
+                        }
+
                         return `
                             <h3>Week beginning ${entryGroupMetadata.nextWeekText}</h3>
                             <table>
                                 <thead>
                                     <tr>
-                                        <th></th><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th></th>
+                                        <th></th>
+                                        ${Array.from("0123456").map((_, i) => `<th>${headingOffset(i)}</th>`).join("\n")}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -162,12 +173,19 @@ export default () =>
                                 let row = e.target;
                                 while (row.tagName !== "TR") row = row.parentElement;
                                 const previouslySelectedProjectId = row.dataset.projectid;
+
+                                // update this row
+                                row.dataset.projectid = selectedProjectId;
+                                for (let i of row.querySelectorAll("input[type=number]")) {
+                                    i.name = i.name.replace(previouslySelectedProjectId, selectedProjectId);
+                                }
+
+                                // update other rows
                                 for (let r of form.querySelectorAll("TR")) {
                                     if (r === row) continue;
                                     r.querySelector(`OPTION[value="${previouslySelectedProjectId}"]`)?.removeAttribute("disabled");
                                     r.querySelector(`OPTION[value="${selectedProjectId}"]`)?.setAttribute("disabled", "");
                                 }
-                                row.dataset.projectid = selectedProjectId;
                             }
                         }
                     },
