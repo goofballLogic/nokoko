@@ -80,21 +80,25 @@ export default function ViewContext() {
                     }
                 }),
                 Element({
-                    tag: "OL",
-                    className: "entry-groups",
+                    tag: "article",
+                    className: "view-context",
                     mutationMessages: [entriesGrouped, accessTokenRejected],
                     postMutationMessage: summaryRendered,
-                    html: message => message[entriesGrouped_groupedEntries]?.map(group => `
-                        <li>
-                            <details>
-                                <summary>
-                                    <span>${groupEntryKeyDateFormat(group[0])}</span>
-                                    <span>${Number(group[entriesGrouped_groupedEntriesTotals] || "0") / 60} hours</span>
-                                </summary>
-                                ${JSON.stringify(group)}
-                            </details>
-                        </li>
-                    `).join("\n")
+                    html: message => `
+                        <h2>History</h2>
+                        <ol class="entry-groups">${message[entriesGrouped_groupedEntries]?.map(group => `
+                            <li>
+                                <details>
+                                    <summary>
+                                        <span>${groupEntryKeyDateFormat(group[0])}</span>
+                                        <span>${Number(group[entriesGrouped_groupedEntriesTotals] || "0") / 60} hours</span>
+                                    </summary>
+                                    ${JSON.stringify(group)}
+                                </details>
+                            </li>
+                        `).join("\n")}
+                        </ol>
+                    `
                 }),
                 Filter({
                     messages: [entriesGrouped],

@@ -154,6 +154,7 @@ export default () =>
 
                         return `
                             <h2>Week beginning ${entryGroupMetadata.nextWeekText}</h2>
+                            <label class="incidental-control"><input type="checkbox" id="weekends">Weekends</label>
                             <table>
                                 <thead>
                                     <tr>
@@ -172,29 +173,46 @@ export default () =>
                     },
                     events: {
                         "change": (e, form) => {
-                            if (e.target.tagName === "SELECT") {
-                                const selectedProjectId = e.target.value;
-                                let row = e.target;
-                                while (row.tagName !== "TR") row = row.parentElement;
-                                const previouslySelectedProjectId = row.dataset.projectid;
+                            if (e.target.id === "weekends") {
 
-                                // update this row
-                                row.dataset.projectid = selectedProjectId;
-                                for (let i of row.querySelectorAll("input[type=text]")) {
-                                    i.name = i.name.replace(previouslySelectedProjectId, selectedProjectId);
+                                if (e.target.checked) {
+                                    if (!form.classList.contains("show-weekends"))
+                                        form.classList.add("show-weekends");
+                                }
+                                else {
+                                    while (form.classList.contains("show-weekends"))
+                                        form.classList.remove("show-weekends");
                                 }
 
-                                // update other rows
-                                for (let r of form.querySelectorAll("TR")) {
-                                    if (r === row) continue;
-                                    r.querySelector(`OPTION[value="${previouslySelectedProjectId}"]`)?.removeAttribute("disabled");
-                                    r.querySelector(`OPTION[value="${selectedProjectId}"]`)?.setAttribute("disabled", "");
+
+                            } else {
+
+                                if (e.target.tagName === "SELECT") {
+
+                                    const selectedProjectId = e.target.value;
+                                    let row = e.target;
+                                    while (row.tagName !== "TR") row = row.parentElement;
+                                    const previouslySelectedProjectId = row.dataset.projectid;
+
+                                    // update this row
+                                    row.dataset.projectid = selectedProjectId;
+                                    for (let i of row.querySelectorAll("input[type=text]")) {
+                                        i.name = i.name.replace(previouslySelectedProjectId, selectedProjectId);
+                                    }
+
+                                    // update other rows
+                                    for (let r of form.querySelectorAll("TR")) {
+                                        if (r === row) continue;
+                                        r.querySelector(`OPTION[value="${previouslySelectedProjectId}"]`)?.removeAttribute("disabled");
+                                        r.querySelector(`OPTION[value="${selectedProjectId}"]`)?.setAttribute("disabled", "");
+                                    }
                                 }
+                                return {
+                                    type: entrySlotsUpdated,
+                                    data: harvestFormData(form)
+                                };
+
                             }
-                            return {
-                                type: entrySlotsUpdated,
-                                data: harvestFormData(form)
-                            };
                         }
                     },
                     postMutationMessage: entrySlotsRendered,

@@ -29,6 +29,7 @@ describe("Background", () => {
 
             beforeEach(async ({ page }) => {
 
+                await page.locator(`#weekends`).click();
                 for (let [name, value] of exampleData) {
                     await page.locator(`input[name="${name}"]`).fill(value);
                 }

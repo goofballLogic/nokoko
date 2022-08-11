@@ -7,9 +7,20 @@
     padding: 20px 0;
 }
 
+.time-entry .incidental-control {
+    float: right;
+}
+
 .time-entry table {
     border-spacing: 0;
     margin: 20px 0;
+}
+
+.time-entry:not(.show-weekends) th:nth-child(2),
+.time-entry:not(.show-weekends) th:nth-child(8),
+.time-entry:not(.show-weekends) td:nth-child(2),
+.time-entry:not(.show-weekends) td:nth-child(8) {
+    display: none;
 }
 
 .time-entry th {
@@ -33,4 +44,10 @@
     text-align: center;
     line-height: 40px;
     height: 40px;
+}
+
+.time-entry button[type=submit] {
+
+    min-width: 150px;
+    line-height: 30px;
 }
