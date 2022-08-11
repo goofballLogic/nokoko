@@ -61,9 +61,7 @@ export default () =>
                     className: "save-success",
                     activationMessage: saveSucceeded,
                     html: "Save succeeded"
-                }),
-                console.log.bind(console)
-
+                })
             ]
         })
 

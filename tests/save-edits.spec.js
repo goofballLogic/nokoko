@@ -40,12 +40,11 @@ describe("Background", () => {
                 beforeEach(async ({ page }) => {
 
                     await page.locator("form.time-entry button[type=submit]").click();
-                    await page.screenshot({ path: "screenshot.png" });
                     await page.locator("dialog").waitFor("visible");
 
                 });
 
-                test.only("Then it should submit all the entries", async ({ page }) => {
+                test("Then it should submit all the entries", async ({ page }) => {
 
                     const actualBodies = POSTrequests
                         .filter(r => r.url.toString() === "https://api.nokotime.com/v2/entries")

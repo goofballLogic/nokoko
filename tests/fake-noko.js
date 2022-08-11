@@ -90,7 +90,6 @@ function fakeNoko(request, route) {
     const body = tryParse(request.postData());
     const headers = request.headers();
     const token = headers["x-nokotoken"];
-
     if (token !== exports.VALID_TOKEN) {
 
         route.fulfill({

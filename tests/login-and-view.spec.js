@@ -49,6 +49,23 @@ describe("Background", () => {
 
       });
 
+      describe("and I refresh the browser window", () => {
+
+        beforeEach(async ({ page }) => {
+
+          await page.reload();
+
+        });
+
+        test("Then it shows that I am still authenticated", async ({ page }) => {
+
+          await expect(page.locator("body")).toHaveClass("authenticated");
+          await expect(page.locator("aside.auth")).toContainText("Authenticated");
+
+        });
+
+      });
+
       describe("but I cancel the token", () => {
 
         beforeEach(async ({ page }) => {
@@ -67,6 +84,23 @@ describe("Background", () => {
         test("Then the list of summaries is removed", async ({ page }) => {
 
           await expect(page.locator(".entry-groups li")).not.toBeVisible();
+
+        });
+
+        describe("and I refresh the browser window", () => {
+
+          beforeEach(async ({ page }) => {
+
+            await page.reload();
+
+          });
+
+          test("Then it shows that I am NOT authenticated", async ({ page }) => {
+
+            await expect(page.locator("body")).not.toHaveClass("authenticated");
+            await expect(page.locator("aside.auth")).not.toContainText("Authenticated");
+
+          });
 
         });
 

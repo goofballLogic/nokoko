@@ -51,26 +51,56 @@ export default function Login() {
                             <div>Not authenticated</div>
                             <label>
                                 <span class="text">Access token</span>
-                                <input type="password" name="access-token" />
+                                <input type="password" name="access-token" value="${sessionStorage.getItem("access-token") || ""}" />
                             </label>
                         `,
-                    mutationMessages: [elementContainerIsReady, accessTokenValidated, accessTokenRejected],
+                    mutationMessages: [
+                        elementContainerIsReady,
+                        accessTokenValidated,
+                        accessTokenRejected
+                    ],
                     events: {
+
                         "click": e => {
+
                             if (e.target.className === "cancel") {
+
+                                sessionStorage.removeItem("access-token");
                                 receiver({ type: accessTokenRejected });
+
                             }
+
                         },
                         "input": e => {
+
                             if (e.target.name === "access-token") {
-                                receiver({
-                                    type: accessTokenEntered,
-                                    data: { value: e.target.value }
-                                })
+
+                                sessionStorage.setItem("access-token", e.target.value);
+                                receiver({ type: accessTokenEntered, data: { value: e.target.value } });
+
                             }
+
                         }
+
                     }
+
                 }),
+                message => {
+
+                    if (message.type === elementContainerIsReady) {
+
+                        const password = document.querySelector("[type=password]");
+                        if (password.value) {
+
+                            return {
+                                type: accessTokenEntered,
+                                data: { value: password.value }
+                            };
+
+                        }
+
+                    }
+                },
                 Filter({
                     messages: [accessTokenValidated, accessTokenRejected],
                     outbound: message => send(message)

@@ -39,8 +39,6 @@ export default function JSONFetcher({
                     if (!resp.ok) resp.status = Math.min(...resp.map(r => r.status).filter(s => s >= 400)); // the lowest error code
                     if (resp.ok) {
 
-                        console.log(12);
-
                         const jsons = await Promise.all(resp.map(r => r.json()));
                         result = { type: successMessage, data: jsons };
 
@@ -55,15 +53,11 @@ export default function JSONFetcher({
 
                 } else {
 
-                    console.log(2);
-
                     // single request
                     const options = { method, headers };
                     if (bodyExtractor) options.body = await bodyExtractor(message); // with body?
                     resp = await fetch(resolvedUrl, options);
                     if (resp.ok) {
-
-                        console.log(22);
 
                         const json = await resp.json();
                         result = { type: successMessage, data: json };
@@ -83,8 +77,6 @@ export default function JSONFetcher({
 
             } catch (err) {
 
-                console.log(3);
-
                 result = {
                     type: failureMessage,
                     data: {
@@ -94,8 +86,6 @@ export default function JSONFetcher({
                 };
 
             } finally {
-
-                console.log(4);
 
                 return outputHandler(result, message);
 
