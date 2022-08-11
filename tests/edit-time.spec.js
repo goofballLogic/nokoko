@@ -21,7 +21,7 @@ describe("Background", () => {
 
         describe("Then an entry table for the latest unpopulated week loads", () => {
 
-            test("identifying the week", async ({ page }) => await expect(page.locator("form.time-entry h3")).toContainText("July 31, 2022"));
+            test("identifying the week", async ({ page }) => await expect(page.locator("form.time-entry h2")).toContainText("July 31, 2022"));
 
             test("with a column heading for each day of the week", async ({ page }) => {
 
@@ -74,7 +74,7 @@ describe("Background", () => {
 
                 const inputs = await page
                     .locator(`form.time-entry table`)
-                    .evaluate(table => Array.from(table.querySelectorAll("input[type=number]")).map(input => [input.name, input.value]));
+                    .evaluate(table => Array.from(table.querySelectorAll("input[type=text]")).map(input => [input.name, input.value]));
 
                 expect(inputs).toEqual([
 
@@ -119,7 +119,7 @@ describe("Background", () => {
 
                 const inputs = await page
                     .locator(`form.time-entry table`)
-                    .evaluate(table => Array.from(table.querySelectorAll("input[type=number]")).map(input => [input.name, input.value]));
+                    .evaluate(table => Array.from(table.querySelectorAll("input[type=text]")).map(input => [input.name, input.value]));
 
                 expect(inputs).toEqual([
 

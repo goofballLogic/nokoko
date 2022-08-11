@@ -1,0 +1,14 @@
+dialog.save-failure, dialog.save-success {
+    min-width: 400px;
+    min-height: 300px;
+    text-align: center;
+    border: solid 1px silver;
+    border-radius: 10px;
+    box-shadow: 0 0 50px 0 black;
+    top: 100px;
+    margin-top: initial !important;
+}
+
+dialog.save-failure {
+    border: solid 2px red;
+}

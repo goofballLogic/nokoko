@@ -9,3 +9,7 @@ export const entriesGrouped_groupedEntriesTotals = Symbol("Totals of grouped ent
 export const entriesGrouped_metadata = Symbol("Metadata about grouped entries");
 export const summaryRendered = Symbol("Summary rendered");
 export const entrySlotsRendered = Symbol("Entry slots rendered");
+export const entrySlotsUpdated = Symbol("Entry slots updated");
+export const saveRequested = Symbol("Save requested");
+export const saveSucceeded = Symbol("Save succeeded");
+export const saveFailed = Symbol("Save failed");

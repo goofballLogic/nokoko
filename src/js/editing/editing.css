@@ -3,6 +3,10 @@
     text-align: center;
 }
 
+.time-entry {
+    padding: 20px 0;
+}
+
 .time-entry table {
     border-spacing: 0;
     margin: 20px 0;
@@ -23,7 +27,7 @@
     border: solid 1px #EEE;
 }
 
-.time-entry select, .time-entry input[type=number] {
+.time-entry select, .time-entry input[type=text] {
     min-width: 100px;
     border: none;
     text-align: center;

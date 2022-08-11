@@ -74,9 +74,20 @@ data.SOME_ENTRIES = [
 
 ];
 
+function tryParse(maybeJSON) {
+    if (maybeJSON) {
+        try {
+            return JSON.parse(maybeJSON);
+        } catch (_) {
+
+        }
+    }
+    return maybeJSON;
+}
 function fakeNoko(request, route) {
 
     const url = new URL(request.url());
+    const body = tryParse(request.postData());
     const headers = request.headers();
     const token = headers["x-nokotoken"];
 
@@ -89,37 +100,77 @@ function fakeNoko(request, route) {
 
     } else {
 
-        switch (url.pathname) {
-            case "/v2/current_user/":
-                route.fulfill({
-                    body: JSON.stringify(data.SOME_PERSON),
-                    status: 200
-                });
+        switch (request.method()) {
+            case "GET":
+                handleGET(url, route);
                 break;
-
-            case "/v2/entries":
-                route.fulfill({
-                    body: JSON.stringify(data.SOME_ENTRIES),
-                    status: 200
-                });
+            case "POST":
+                handlePOST(url, body, route);
                 break;
-
-            case "/v2/projects":
-                route.fulfill({
-                    body: JSON.stringify(Object.values(data.PROJECTS)),
-                    status: 200
-                });
-                break;
-
             default:
-                console.warn("Not found", url);
                 route.fulfill({
-                    body: "Not found",
-                    status: 404
+                    body: "Method not allowed",
+                    status: 405
                 });
-
         }
 
     }
 
+}
+
+exports.POSTrequests = [];
+
+function handlePOST(url, body, route) {
+
+    switch (url.pathname) {
+        case "/v2/entries":
+            exports.POSTrequests.push({ url, body });
+            route.fulfill({
+                body: "Ok",
+                status: 201
+            });
+            break;
+        default:
+            console.warn("Not found POST", url);
+            route.fulfill({
+                body: "Not found",
+                status: 404
+            });
+
+    }
+
+}
+
+function handleGET(url, route) {
+    switch (url.pathname) {
+        case "/v2/current_user/":
+            route.fulfill({
+                body: JSON.stringify(data.SOME_PERSON),
+                status: 200
+            });
+            break;
+
+        case "/v2/entries":
+
+            route.fulfill({
+                body: JSON.stringify(data.SOME_ENTRIES),
+                status: 200
+            });
+            break;
+
+        case "/v2/projects":
+            route.fulfill({
+                body: JSON.stringify(Object.values(data.PROJECTS)),
+                status: 200
+            });
+            break;
+
+        default:
+            console.warn("Not found GET", url);
+            route.fulfill({
+                body: "Not found",
+                status: 404
+            });
+
+    }
 }

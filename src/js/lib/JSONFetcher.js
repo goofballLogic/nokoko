@@ -2,7 +2,7 @@ export default function JSONFetcher({
     url,
     method = "GET",
     activationMessage, successMessage, failureMessage,
-    headersHandler, outputHandler
+    bodyExtractor, bodiesExtractor, headersHandler, outputHandler
 }) {
 
     headersHandler = headersHandler || (x => x);
@@ -24,27 +24,83 @@ export default function JSONFetcher({
                             ? "/example_data/current_user.json"
                             : resolvedUrl;
 
-            const resp = await fetch(resolvedUrl, { method, headers });
-
-            let caught;
+            let resp;
             let result;
             try {
-                if (resp.ok) {
-                    const json = await resp.json();
-                    result = ({ type: successMessage, data: json });
+
+                if (bodiesExtractor) {
+
+                    console.log(1);
+
+                    // multi request with body
+                    const bodies = await bodiesExtractor(message);
+                    resp = await Promise.all(bodies.map(body => fetch(resolvedUrl, { method, headers, body })));
+                    resp.ok = resp.every(r => r.ok);
+                    if (!resp.ok) resp.status = Math.min(...resp.map(r => r.status).filter(s => s >= 400)); // the lowest error code
+                    if (resp.ok) {
+
+                        console.log(12);
+
+                        const jsons = await Promise.all(resp.map(r => r.json()));
+                        result = { type: successMessage, data: jsons };
+
+                    } else {
+
+                        result = {
+                            type: failureMessage,
+                            data: resp.map(r => ({ status: r.status, message: r.statusText }))
+                        };
+
+                    }
+
+                } else {
+
+                    console.log(2);
+
+                    // single request
+                    const options = { method, headers };
+                    if (bodyExtractor) options.body = await bodyExtractor(message); // with body?
+                    resp = await fetch(resolvedUrl, options);
+                    if (resp.ok) {
+
+                        console.log(22);
+
+                        const json = await resp.json();
+                        result = { type: successMessage, data: json };
+
+                    } else {
+
+                        result = {
+                            type: failureMessage,
+                            data: {
+                                status: resp.status,
+                                message: resp.statusText
+                            }
+                        }
+                    }
+
                 }
+
             } catch (err) {
-                caught = err;
-                result = ({
-                    type: failureMessage, data: {
+
+                console.log(3);
+
+                result = {
+                    type: failureMessage,
+                    data: {
                         status: resp.status,
                         err: err
                     }
-                });
+                };
+
             } finally {
-                result = outputHandler(result, message);
-                return result;
+
+                console.log(4);
+
+                return outputHandler(result, message);
+
             }
+
         }
 
     };

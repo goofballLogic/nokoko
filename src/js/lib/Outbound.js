@@ -6,8 +6,10 @@ export default function Outbound(innerFactory) {
     // create the inner world with a way to call the outer world (if known)
     const inner = innerFactory(async message => {
 
-        message[taint] = true;
-        return await outside(message);
+        if (message) {
+            message[taint] = true;
+            return await outside(message);
+        }
 
     });
 

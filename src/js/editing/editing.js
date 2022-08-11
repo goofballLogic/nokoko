@@ -2,12 +2,11 @@ import { loadCSS } from "../css-loader.js";
 import Outbound from "../lib/Outbound.js";
 import Receiver from "../lib/Receiver.js";
 import Element from "../lib/Element.js";
-import { accessTokenRejected, accessTokenValidated, entriesGrouped, entriesGrouped_groupedEntries, entriesGrouped_metadata, entrySlotsRendered } from "../messages.js";
+import { accessTokenRejected, accessTokenValidated, entriesGrouped, entriesGrouped_groupedEntries, entriesGrouped_metadata, entrySlotsRendered, entrySlotsUpdated } from "../messages.js";
 import JSONFetcher from "../lib/JSONFetcher.js";
-import MessageCache from "../lib/MessageCache.js";
-import Transform from "../lib/Transform.js";
 import Gather from "../lib/Gather.js";
 import Calculator from "../lib/Calculator.js";
+import Filter from "../lib/Filter.js";
 
 loadCSS(import.meta.url);
 
@@ -133,7 +132,11 @@ export default () =>
                                 </td>
                                 ${Array.from("0123456").map((_, i) => `
                                     <td>
-                                        <input type="number" min="0" max="24" name="${nameFor(selectedProjectId, i)}" value="${valueFor(selectedProjectId, i) || ""}">
+                                        <input
+                                            type="text"
+                                            name="${nameFor(selectedProjectId, i)}"
+                                            value="${valueFor(selectedProjectId, i) || ""}"
+                                            pattern="[0-9]{1,2}(?::[0-9]{2})?" />
                                     </td>
                                 `).join("\n")}
                             </tr>
@@ -150,7 +153,7 @@ export default () =>
                         }
 
                         return `
-                            <h3>Week beginning ${entryGroupMetadata.nextWeekText}</h3>
+                            <h2>Week beginning ${entryGroupMetadata.nextWeekText}</h2>
                             <table>
                                 <thead>
                                     <tr>
@@ -163,6 +166,7 @@ export default () =>
                                     ${projectSection("new", "new")}
                                 </tbody>
                             </table>
+                            <button type="submit">Save</button>
                         `;
 
                     },
@@ -176,7 +180,7 @@ export default () =>
 
                                 // update this row
                                 row.dataset.projectid = selectedProjectId;
-                                for (let i of row.querySelectorAll("input[type=number]")) {
+                                for (let i of row.querySelectorAll("input[type=text]")) {
                                     i.name = i.name.replace(previouslySelectedProjectId, selectedProjectId);
                                 }
 
@@ -187,11 +191,32 @@ export default () =>
                                     r.querySelector(`OPTION[value="${selectedProjectId}"]`)?.setAttribute("disabled", "");
                                 }
                             }
+                            return {
+                                type: entrySlotsUpdated,
+                                data: harvestFormData(form)
+                            };
                         }
                     },
                     postMutationMessage: entrySlotsRendered,
+                }),
+                Filter({
+                    messages: [entrySlotsRendered],
+                    outbound: send
                 })
             ]
         })
 
     );
+function harvestFormData(form) {
+    const data = {};
+    new FormData(form).forEach((value, key) => {
+        if (!(key in data)) {
+            data[key] = value;
+        } else {
+            const preValue = data[key];
+            data[key] = Array.isArray(preValue) ? [...preValue, value] : [preValue, value];
+        }
+    });
+    return data;
+}
+

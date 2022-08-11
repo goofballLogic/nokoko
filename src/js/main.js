@@ -4,7 +4,7 @@ import { elementContainerIsReady } from "./messages.js";
 import Receiver from "./lib/Receiver.js";
 import ViewContext from "./view-context/view-context.js";
 import Editing from "./editing/editing.js";
-
+import Saving from "./saving/saving.js";
 loadCSS(import.meta.url);
 
 Number.prototype.leftPad = function (padChar, length) {
@@ -20,6 +20,7 @@ export default async function main() {
             Login(),
             Editing(),
             ViewContext(),
+            Saving()
         ]
     });
 
