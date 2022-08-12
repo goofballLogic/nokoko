@@ -19,18 +19,8 @@ export default function Element({
     }
 
     return Outbound(send => {
-        if (events)
-            for (const eventName in events) {
-                el.addEventListener(eventName, async e => {
 
-                    const handler = events[eventName];
-                    const outcome = await handler(e, el);
-                    if (outcome) send(outcome);
-
-                });
-            }
-
-        return (message) => {
+        function element(message) {
             let wasMutated = false;
             if (isDynamicHTML && mutationMessages && mutationMessages.includes(message.type)) {
                 let previousHTML = el.innerHTML;
@@ -59,6 +49,22 @@ export default function Element({
                 send({ type: postMutationMessage });
             }
         };
+
+        if (events)
+            for (const eventName in events) {
+                el.addEventListener(eventName, async e => {
+
+                    const handler = events[eventName];
+                    const outcome = await handler(e, el);
+                    if (outcome) {
+                        element(outcome); // to myself
+                        send(outcome); // to the rest of the world
+                    }
+
+                });
+            }
+
+        return element;
 
     });
 

@@ -41,6 +41,7 @@ describe("Background", () => {
                 beforeEach(async ({ page }) => {
 
                     await page.locator("form.time-entry button[type=submit]").click();
+                    await page.screenshot({ path: "screenshot.png" });
                     await page.locator("dialog").waitFor("visible");
 
                 });

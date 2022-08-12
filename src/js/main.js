@@ -1,34 +1,46 @@
 import { loadCSS } from "./css-loader.js";
+import { accessTokenRejected, accessTokenValidated, elementContainerIsReady, entriesGrouped, entrySlotsRendered } from "./messages.js";
 import Login from "./login/login.js";
-import { elementContainerIsReady } from "./messages.js";
-import Receiver from "./lib/Receiver.js";
 import ViewContext from "./view-context/view-context.js";
 import Editing from "./editing/editing.js";
 import Saving from "./saving/saving.js";
-loadCSS(import.meta.url);
+import Domain from "./lib/Domain.js";
+import "./prototype-extensions.js";
 
-Number.prototype.leftPad = function (padChar, length) {
-    const text = this.toString();
-    return text.length < length ? `${padChar.repeat(length - text.length)}${text}` : text;
-}
+loadCSS(import.meta.url);
 
 export default async function main() {
 
-    const domain = Receiver({
+    const subdomains = [
+        {
+            name: "Login",
+            objects: Login,
+            outboundMessages: [accessTokenValidated, accessTokenRejected],
+        },
+        {
+            name: "Editing",
+            objects: Editing,
+            outboundMessages: [entrySlotsRendered]
+        },
+        {
+            name: "View/Context",
+            objects: ViewContext,
+            outboundMessages: [entriesGrouped]
+        },
+        {
+            name: "Saving",
+            objects: Saving,
+        }
+    ].map(Domain);
+
+    const mainDomain = Domain({
         name: "Main",
-        objects: [
-            Login(),
-            Editing(),
-            ViewContext(),
-            Saving()
-        ]
+        objects: subdomains
     });
 
-    await domain({
-
+    await mainDomain({
         type: elementContainerIsReady,
         data: { container: document.body }
-
     });
 
 }
