@@ -18,8 +18,7 @@ export default function Domain({
         if (typeof objects === "function") {
             objects = objects(send);
         }
-        objects = Array.isArray(objects) ? objects : objects ? [objects] : [];
-        return [...objects, Filter({
+        return [...asArray(objects), Filter({
             messages: outboundMessages,
             outbound: send
         })];
