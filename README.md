@@ -3,3 +3,5 @@
 
 # nokoko
 Better noko client
+
+https://goofballlogic.github.io/nokoko/
