@@ -1,6 +1,6 @@
 import { loadCSS } from "../css-loader.js";
 import Element from "../lib/Element.js";
-import { accessTokenRejected, accessTokenValidated, entriesGrouped, entriesGrouped_groupedEntries, entriesGrouped_metadata, entrySlotsRendered, entrySlotsUpdated } from "../messages.js";
+import { accessTokenRejected, accessTokenValidated, entriesGrouped, entriesGrouped_groupedEntries, entrySlotsRendered } from "../messages.js";
 import JSONFetcher from "../lib/JSONFetcher.js";
 import Gather from "../lib/Gather.js";
 import Calculator from "../lib/Calculator.js";
@@ -10,7 +10,7 @@ loadCSS(import.meta.url);
 
 export const projectsRetrieved = Symbol("Projects retrieved");
 export const entryGroupLookbacksCalculated = Symbol("Entry group lookbacks calculated");
-const entriesGrouped_and_entryGroupLookbacksCalculated_and_projectsRetrieved = Symbol("Entries grouped AND entry group lookbacks calculated AND projects retrieved");
+const readyToRenderTimeEntryForm = Symbol("Ready to render time entry form");
 
 export default [
 
@@ -60,15 +60,16 @@ export default [
 
     Gather({
         messagesToGather: [entriesGrouped, entryGroupLookbacksCalculated, projectsRetrieved],
-        gatherMessage: entriesGrouped_and_entryGroupLookbacksCalculated_and_projectsRetrieved
+        gatherMessage: readyToRenderTimeEntryForm
     }),
 
     Element({
         tag: "form",
         className: "time-entry",
-        mutationMessages: [entriesGrouped_and_entryGroupLookbacksCalculated_and_projectsRetrieved],
+        mutationMessages: [readyToRenderTimeEntryForm],
         html: timeEntry,
         events: timeEntryEvents,
         postMutationMessage: entrySlotsRendered,
     })
+
 ];
