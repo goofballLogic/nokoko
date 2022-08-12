@@ -46,6 +46,11 @@ describe("Background", () => {
 
                 });
 
+                function parseDuration(timey) {
+                    const [hours, minutes] = timey.split(":");
+                    return (Number(hours) || 0) * 60 + (Number(minutes) || 0);
+                }
+
                 test("Then it should submit all the entries", async ({ page }) => {
 
                     const actualBodies = POSTrequests
@@ -56,7 +61,7 @@ describe("Background", () => {
 
                         const expected = {
                             date: name.split("_")[1],
-                            minutes: Number(value) * 60,
+                            minutes: parseDuration(value),
                             project_id: Number(name.split("_")[0])
                         };
                         if (expected.minutes) {
