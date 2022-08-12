@@ -19,7 +19,7 @@ jobs:
       run: npm ci
 
     - name: Start server
-      run: npm dev &
+      run: npx http-server src -c0 &
 
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
