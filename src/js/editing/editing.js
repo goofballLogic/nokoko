@@ -5,6 +5,7 @@ import JSONFetcher from "../lib/JSONFetcher.js";
 import Gather from "../lib/Gather.js";
 import Calculator from "../lib/Calculator.js";
 import timeEntry, { events as timeEntryEvents } from "./time-entry.js";
+import Filter from "../lib/Filter.js";
 
 loadCSS(import.meta.url);
 
@@ -70,6 +71,13 @@ export default [
         html: timeEntry,
         events: timeEntryEvents,
         postMutationMessage: entrySlotsRendered,
+    }),
+
+    Filter({
+        messages: [entrySlotsRendered],
+        object: () => {
+            document.querySelectorAll("form.time-entry input.time-entry")[1]?.focus()
+        }
     })
 
 ];

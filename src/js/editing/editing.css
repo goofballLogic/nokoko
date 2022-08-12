@@ -9,6 +9,12 @@
 
 .time-entry .incidental-control {
     float: right;
+    display: flex;
+    background-color: #EEE;
+    border-radius: 5px;
+    padding: 10px;
+    gap: 5px;
+    align-items: center;
 }
 
 .time-entry table {

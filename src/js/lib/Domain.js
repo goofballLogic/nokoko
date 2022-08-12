@@ -20,7 +20,7 @@ export default function Domain({
         }
         return [...asArray(objects), Filter({
             messages: outboundMessages,
-            outbound: send
+            object: send
         })];
 
     }

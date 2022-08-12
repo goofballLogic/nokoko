@@ -39,7 +39,6 @@ export default function render(message) {
 
     const { editProjectIds, editWeek, projects, entryGroupMetadata } = preProcess(message);
 
-
     const projectOption = (project, selectedProjectId) => `
         <option value="${project.id}"${project.id === selectedProjectId ? " selected" : editProjectIds.has(project.id) ? " disabled" : ""}>
             ${htmlEncode(project.name)}
@@ -74,7 +73,8 @@ export default function render(message) {
                         type="text"
                         name="${nameFor(selectedProjectId, i)}"
                         value="${valueFor(selectedProjectId, i) || ""}"
-                        pattern="[0-9]{1,2}(?::[0-9]{2})?" />
+                        pattern="[0-9]{1,2}(?::[0-9]{2})?"
+                        class="time-entry" />
                 </td>
             `).join("\n")}
         </tr>
@@ -153,6 +153,7 @@ export const events = {
 
         }
     }
+
 };
 
 function harvestFormData(form) {

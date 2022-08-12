@@ -21,6 +21,7 @@ export default function Element({
     return Outbound(send => {
 
         function element(message) {
+
             let wasMutated = false;
             if (isDynamicHTML && mutationMessages && mutationMessages.includes(message.type)) {
                 let previousHTML = el.innerHTML;
@@ -30,8 +31,11 @@ export default function Element({
             if (message.type === elementContainerIsReady) {
                 wasMutated = true;
                 const { container } = message.data || {};
-                if (container)
+                if (container) {
                     container.appendChild(el);
+                    if (events)
+                        handleEvent("load", { target: el, type: "load" });
+                }
                 else
                     console.warn("Expected data: { container } but got none");
             }
@@ -48,23 +52,30 @@ export default function Element({
             if (wasMutated && postMutationMessage) {
                 send({ type: postMutationMessage });
             }
+
         };
 
         if (events)
             for (const eventName in events) {
                 el.addEventListener(eventName, async e => {
 
-                    const handler = events[eventName];
-                    const outcome = await handler(e, el);
-                    if (outcome) {
-                        element(outcome); // to myself
-                        send(outcome); // to the rest of the world
-                    }
+                    await handleEvent(eventName, e);
 
                 });
             }
 
         return element;
+
+        async function handleEvent(eventName, e) {
+            const handler = events[eventName];
+            if (handler) {
+                const outcome = await handler(e, el);
+                if (outcome) {
+                    element(outcome); // to myself
+                    send(outcome);
+                }
+            }
+        }
 
     });
 

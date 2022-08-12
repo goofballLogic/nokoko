@@ -1,8 +1,8 @@
-export default function Filter({ messages, outbound }) {
+export default function Filter({ messages, object }) {
 
     return async message => {
         if (messages && messages.includes(message.type)) {
-            await outbound(message);
+            return await object(message);
         }
     }
 

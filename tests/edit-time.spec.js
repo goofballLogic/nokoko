@@ -87,9 +87,15 @@ describe("Background", () => {
 
             });
 
-            test("and projects selected for other rows should be disabled for selection", async ({ page }) => {
+            test("projects selected for other rows should be disabled for selection", async ({ page }) => {
 
                 await expect(page.locator(`form.time-entry tr[data-projectid="31234567"] select option[value="31234568"]`)).toBeDisabled();
+
+            });
+
+            test("focus should be on the top Monday input", async ({ page }) => {
+
+                await expect(page.locator(`form.time-entry input[name="31234567_2022-08-01"]`)).toBeFocused();
 
             });
 
