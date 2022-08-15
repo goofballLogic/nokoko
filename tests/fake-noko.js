@@ -10,6 +10,15 @@ exports.installFakeNoko = async (context) => {
 
 exports.VALID_TOKEN = "d87234kjhsdkfg62374537263t4hdgjgshdgfsdf";
 
+const handlerDecorations = [];
+
+exports.decorateAPIRequests = (handler) => {
+
+    handlerDecorations.push(handler);
+    return () => handlerDecorations.splice(handlerDecorations.indexOf(handler), 1);
+
+};
+
 const data = {
     SOME_PERSON: {
         id: 123456,
@@ -86,6 +95,12 @@ function tryParse(maybeJSON) {
 }
 function fakeNoko(request, route) {
 
+    for (let handler of handlerDecorations) {
+
+        if (handler(request, route)) return; // early return if the handler handled this request
+
+    }
+
     const url = new URL(request.url());
     const body = tryParse(request.postData());
     const headers = request.headers();
@@ -125,7 +140,7 @@ function handlePOST(url, body, route) {
         case "/v2/entries":
             exports.POSTrequests.push({ url, body });
             route.fulfill({
-                body: "Ok",
+                body: JSON.stringify(body),
                 status: 201
             });
             break;

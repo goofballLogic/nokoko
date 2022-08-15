@@ -14,15 +14,7 @@ export default function JSONFetcher({
         if (message.type === activationMessage) {
 
             const headers = headersHandler({}, message);
-            let resolvedUrl = typeof url === "function" ? url(message) : url;
-            if (document.location.search.includes("data=example"))
-                resolvedUrl = resolvedUrl.includes("entries")
-                    ? "/example_data/entries.json"
-                    : resolvedUrl.includes("projects")
-                        ? "/example_data/projects.json"
-                        : resolvedUrl.includes("/current_user")
-                            ? "/example_data/current_user.json"
-                            : resolvedUrl;
+            let resolvedUrl = overrideExampleData(typeof url === "function" ? url(message) : url);
 
             let resp;
             let result;
@@ -30,48 +22,11 @@ export default function JSONFetcher({
 
                 if (bodiesExtractor) {
 
-                    console.log(1);
-
-                    // multi request with body
-                    const bodies = await bodiesExtractor(message);
-                    resp = await Promise.all(bodies.map(body => fetch(resolvedUrl, { method, headers, body })));
-                    resp.ok = resp.every(r => r.ok);
-                    if (!resp.ok) resp.status = Math.min(...resp.map(r => r.status).filter(s => s >= 400)); // the lowest error code
-                    if (resp.ok) {
-
-                        const jsons = await Promise.all(resp.map(r => r.json()));
-                        result = { type: successMessage, data: jsons };
-
-                    } else {
-
-                        result = {
-                            type: failureMessage,
-                            data: resp.map(r => ({ status: r.status, message: r.statusText }))
-                        };
-
-                    }
+                    ({ resp, result } = (await multiBodiedRequest(message, resolvedUrl, headers)));
 
                 } else {
 
-                    // single request
-                    const options = { method, headers };
-                    if (bodyExtractor) options.body = await bodyExtractor(message); // with body?
-                    resp = await fetch(resolvedUrl, options);
-                    if (resp.ok) {
-
-                        const json = await resp.json();
-                        result = { type: successMessage, data: json };
-
-                    } else {
-
-                        result = {
-                            type: failureMessage,
-                            data: {
-                                status: resp.status,
-                                message: resp.statusText
-                            }
-                        }
-                    }
+                    ({ resp, result } = (await singleRequest(message, resolvedUrl, headers)));
 
                 }
 
@@ -80,7 +35,8 @@ export default function JSONFetcher({
                 result = {
                     type: failureMessage,
                     data: {
-                        status: resp.status,
+                        status: resp?.status,
+                        message: err?.message,
                         err: err
                     }
                 };
@@ -95,4 +51,95 @@ export default function JSONFetcher({
 
     };
 
+    async function singleRequest(message, url, headers) {
+
+        const options = { method, headers };
+        if (bodyExtractor)
+            options.body = await bodyExtractor(message); // with body?
+        const resp = await fetchWithRetry({ url, ...options });
+        let result;
+        if (resp.ok) {
+
+            const json = await resp.json();
+            result = { type: successMessage, data: json };
+
+        } else {
+
+            result = {
+                type: failureMessage,
+                data: {
+                    status: resp.status,
+                    message: resp.statusText
+                }
+            };
+
+        }
+        return { resp, result };
+
+    }
+
+    async function multiBodiedRequest(message, url, headers) {
+
+        const bodies = await bodiesExtractor(message);
+        const resp = await Promise.all(bodies.map(body => fetchWithRetry({ url, method, headers, body })));
+        resp.ok = resp.every(r => r.ok);
+        let result;
+        if (!resp.ok)
+            resp.status = Math.min(...resp.map(r => r.status).filter(s => s >= 400)); // the lowest error code
+        if (resp.ok) {
+
+            const jsons = await Promise.all(resp.map(r => r.json()));
+            result = { type: successMessage, data: jsons };
+
+        } else {
+
+            result = {
+                type: failureMessage,
+                data: resp.map(r => ({ status: r.status, message: r.statusText }))
+            };
+
+        }
+        return { resp, result };
+
+    }
+
 }
+
+const retryLimit = 5;
+const backoff = 250;
+
+function overrideExampleData(resolvedUrl) {
+    if (!document.location.search.includes("data=example"))
+        return resolvedUrl;
+    return resolvedUrl.includes("entries")
+        ? "/example_data/entries.json"
+        : resolvedUrl.includes("projects")
+            ? "/example_data/projects.json"
+            : resolvedUrl.includes("/current_user")
+                ? "/example_data/current_user.json"
+                : resolvedUrl;
+
+}
+
+async function fetchWithRetry({ url, method, headers, body }) {
+
+    let statusFloor = 0;
+    let retries = 0;
+    let resp;
+    const shouldRetry = () => (statusFloor !== 200) && (statusFloor !== 500) && (retries < retryLimit);
+    while (shouldRetry()) {
+
+        resp = await fetch(url, { method, headers, body });
+        statusFloor = Math.floor(resp.status / 100) * 100;
+        if (shouldRetry()) {
+
+            retries++;
+            await new Promise(resolve => setTimeout(resolve, backoff));
+
+        }
+
+    }
+    return resp;
+
+}
+

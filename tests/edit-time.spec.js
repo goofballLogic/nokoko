@@ -121,7 +121,7 @@ describe("Background", () => {
 
             });
 
-            test("Then the input names change to match the new proejct", async ({ page }) => {
+            test("Then the input names change to match the new project", async ({ page }) => {
 
                 const inputs = await page
                     .locator(`form.time-entry table`)
