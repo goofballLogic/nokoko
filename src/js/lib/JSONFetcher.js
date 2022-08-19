@@ -129,8 +129,12 @@ async function fetchWithRetry({ url, method, headers, body }) {
     const shouldRetry = () => (statusFloor !== 200) && (statusFloor !== 500) && (retries < retryLimit);
     while (shouldRetry()) {
 
-        resp = await fetch(url, { method, headers, body });
-        statusFloor = Math.floor(resp.status / 100) * 100;
+        try {
+            resp = await fetch(url, { method, headers, body });
+            statusFloor = Math.floor(resp.status / 100) * 100;
+        } catch (err) {
+            statusFloor = -1;
+        }
         if (shouldRetry()) {
 
             retries++;
