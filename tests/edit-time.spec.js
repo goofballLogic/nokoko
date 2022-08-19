@@ -101,7 +101,7 @@ describe("Background", () => {
 
         });
 
-        describe("And I change the project for one of the rows", () => {
+        describe("and I change the project for one of the rows", () => {
 
             beforeEach(async ({ page }) => {
 

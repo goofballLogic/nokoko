@@ -91,7 +91,8 @@ export default function render(message) {
     }
 
     return `
-        <h2>Week beginning ${entryGroupMetadata.nextWeekText}</h2>
+
+        <h2>Week of ${entryGroupMetadata.nextWeekText}</h2>
         <label class="incidental-control"><input type="checkbox" id="weekends">Weekends</label>
         <table>
             <thead>
@@ -106,7 +107,9 @@ export default function render(message) {
             </tbody>
         </table>
         <button type="submit">Save</button>
+
     `;
+
 }
 
 

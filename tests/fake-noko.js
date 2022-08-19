@@ -2,7 +2,7 @@ exports.installFakeNoko = async (context) => {
 
     await context.route("https://api.nokotime.com/**/*", (route, request) => {
 
-        fakeNoko(request, route);
+        fakeNoko(request, route, context);
 
     });
 
@@ -10,12 +10,11 @@ exports.installFakeNoko = async (context) => {
 
 exports.VALID_TOKEN = "d87234kjhsdkfg62374537263t4hdgjgshdgfsdf";
 
-const handlerDecorations = [];
+exports.decorateAPIRequests = (context, handler) => {
 
-exports.decorateAPIRequests = (handler) => {
-
-    handlerDecorations.push(handler);
-    return () => handlerDecorations.splice(handlerDecorations.indexOf(handler), 1);
+    context.handlerDecorations = context.handlerDecorations || [];
+    context.handlerDecorations.push(handler);
+    return () => context.handlerDecorations.splice(context.handlerDecorations.indexOf(handler), 1);
 
 };
 
@@ -93,13 +92,14 @@ function tryParse(maybeJSON) {
     }
     return maybeJSON;
 }
-function fakeNoko(request, route) {
+async function fakeNoko(request, route, context) {
 
-    for (let handler of handlerDecorations) {
+    if (context.handlerDecorations)
+        for (let handler of context.handlerDecorations) {
 
-        if (handler(request, route)) return; // early return if the handler handled this request
+            if (await handler(request, route)) return; // early return if the handler handled this request
 
-    }
+        }
 
     const url = new URL(request.url());
     const body = tryParse(request.postData());

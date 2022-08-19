@@ -121,19 +121,35 @@ function overrideExampleData(resolvedUrl) {
 
 }
 
+let liveFetchRequests = 0;
+
+if (new URL(window?.location).searchParams.get("exposeFetchCounter") === "true") {
+    window.nokoko = { ...window.nokoko, fetchRequests: () => liveFetchRequests };
+}
+
 async function fetchWithRetry({ url, method, headers, body }) {
 
     let statusFloor = 0;
     let retries = 0;
     let resp;
-    const shouldRetry = () => (statusFloor !== 200) && (statusFloor !== 500) && (retries < retryLimit);
+    const isResolved = () => (statusFloor !== 200) && (statusFloor !== 500);
+    const shouldRetry = () => isResolved() && (retries < retryLimit);
     while (shouldRetry()) {
 
         try {
+
+            liveFetchRequests++;
             resp = await fetch(url, { method, headers, body });
             statusFloor = Math.floor(resp.status / 100) * 100;
+
         } catch (err) {
+
             statusFloor = -1;
+
+        } finally {
+
+            liveFetchRequests--;
+
         }
         if (shouldRetry()) {
 
