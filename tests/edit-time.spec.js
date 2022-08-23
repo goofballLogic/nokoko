@@ -140,6 +140,67 @@ describe("Background", () => {
 
         });
 
+        describe("and focus is on the first visible input", () => {
+
+            beforeEach(async ({ page }) => {
+
+                await page.locator("form.time-entry input[type=text]:visible").first().focus();
+
+            });
+
+            describe("and I press the right arrow, and then the down arrow", () => {
+
+                beforeEach(async ({ page }) => {
+
+                    await page.keyboard.press("ArrowRight");
+                    await page.keyboard.press("ArrowDown");
+
+                });
+
+                test("Then I should be focused on the next row, next day's entry slot", async ({ page }) => {
+
+                    await expect(page.locator(`input[name="31234568_2022-08-02"]`)).toBeFocused();
+
+                });
+
+            });
+
+            describe("and I press the up arrow, and then the left arrow", () => {
+
+                beforeEach(async ({ page }) => {
+
+                    await page.keyboard.press("ArrowUp");
+                    await page.keyboard.press("ArrowLeft");
+
+                });
+
+                test("Then focus should have wrapped around to be focused on the bottom row, last column entry slot", async ({ page }) => {
+
+                    await expect(page.locator(`input[name="new_2022-08-05"]`)).toBeFocused();
+
+                });
+
+            })
+
+        });
+
+        describe("and some values are entered", () => {
+
+            beforeEach(async ({ page }) => {
+
+                await page.locator("form.time-entry input[type=text]:visible").first().type("3:30");
+
+            });
+
+            test.skip("Then the total for each day should be shown", async ({ page }) => {
+
+                await page.screenshot({ path: "screenshot.png" });
+                throw new Error("oops");
+
+            });
+
+        });
+
 
     })
 

@@ -115,6 +115,79 @@ export default function render(message) {
 
 export const events = {
 
+    "keydown": (e) => {
+
+        const currentInput = e.target;
+        if (currentInput.tagName !== "INPUT") return; // only inputs
+        if (!currentInput.classList.contains("time-entry")) return; // only time-entry inputs
+
+        if (!["Right", "ArrowRight", "Left", "ArrowLeft", "Down", "ArrowDown", "Up", "ArrowUp"].includes(e.key))
+            return;
+
+        const inputGrid = Array
+            .from(document.querySelectorAll("form.time-entry tr"))
+            .map(tr => Array
+                .from(tr.querySelectorAll("input.time-entry"))
+                .filter(input => window.getComputedStyle(input.parentElement).display !== "none")
+            )
+            .filter(list => list.length);
+
+
+        switch (e.key) {
+            case "Right":
+            case "ArrowRight":
+                {
+                    for (let row of inputGrid) {
+                        const columnIndex = row.indexOf(currentInput);
+                        if (columnIndex > -1) {
+                            const newIndex = columnIndex < (row.length - 1) ? columnIndex + 1 : 0;
+                            row[newIndex].focus();
+                            break;
+                        }
+                    }
+                    break;
+                }
+            case "Left":
+            case "ArrowLeft":
+                {
+                    for (let row of inputGrid) {
+                        const columnIndex = row.indexOf(currentInput);
+                        if (columnIndex > -1) {
+                            const newIndex = columnIndex === 0 ? row.length - 1 : columnIndex - 1;
+                            row[newIndex].focus();
+                            break;
+                        }
+                    }
+                    break;
+                }
+            case "Down":
+            case "ArrowDown":
+                {
+                    inputGrid.forEach((row, rowIndex) => {
+                        const columnIndex = row.indexOf(currentInput);
+                        if (columnIndex > -1) {
+                            const newRowIndex = rowIndex < (inputGrid.length - 1) ? rowIndex + 1 : 0;
+                            inputGrid[newRowIndex][columnIndex].focus();
+                        }
+                    });
+                }
+                break;
+            case "Up":
+            case "ArrowUp":
+                {
+                    inputGrid.forEach((row, rowIndex) => {
+                        const columnIndex = row.indexOf(currentInput);
+                        if (columnIndex > -1) {
+                            const newRowIndex = rowIndex === 0 ? inputGrid.length - 1 : rowIndex - 1;
+                            inputGrid[newRowIndex][columnIndex].focus();
+                        }
+                    });
+                }
+
+        }
+
+    },
+
     "change": (e, form) => {
         if (e.target.id === "weekends") {
 
