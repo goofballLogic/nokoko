@@ -10,7 +10,7 @@ describe("Background", () => {
 
     });
 
-    describe("When entries have loaded", () => {
+    describe.only("When entries have loaded", () => {
 
         beforeEach(async ({ page }) => {
 
@@ -40,7 +40,11 @@ describe("Background", () => {
 
             });
 
-            test("with a not-yet-populated row", async ({ page }) => await expect(page.locator(`form.time-entry tr.new`)).toBeVisible());
+            test("with a not-yet-populated row", async ({ page }) => {
+
+                await expect(page.locator(`form.time-entry tr[data-projectid="new"]`)).toBeVisible();
+
+            });
 
             test("with each dropdown containing the available projects", async ({ page }) => {
 
@@ -64,9 +68,9 @@ describe("Background", () => {
 
             });
 
-            test("with the null project should be selected in the drop down for the new row", async ({ page }) => {
+            test("with the null project selected in the drop down for the new row", async ({ page }) => {
 
-                await expect(page.locator(`form.time-entry tr.new select`)).toHaveValue("");
+                await expect(page.locator(`form.time-entry tr[data-projectid="new"] select`)).toHaveValue("");
 
             });
 
@@ -188,14 +192,51 @@ describe("Background", () => {
 
             beforeEach(async ({ page }) => {
 
-                await page.locator("form.time-entry input[type=text]:visible").first().type("3:30");
+                // column 1 - contains a 0 entry
+                await page.locator("form.time-entry input[type=text]:visible").nth(0).type("3:30");
+                await page.locator("form.time-entry input[type=text]:visible").nth(5).type("2:15");
+                await page.locator("form.time-entry input[type=text]:visible").nth(10).type("0:00");
+                // column 2 - contains invalid entry "hello"
+                await page.locator("form.time-entry input[type=text]:visible").nth(1).type("7");
+                await page.locator("form.time-entry input[type=text]:visible").nth(6).type("0:10");
+                await page.locator("form.time-entry input[type=text]:visible").nth(11).type("hello");
+                // column 3
+                await page.locator("form.time-entry input[type=text]:visible").nth(2).type("6:45");
+                await page.locator("form.time-entry input[type=text]:visible").nth(7).type("0:23");
+                // column 4 - contains allowed hour value "25"
+                await page.locator("form.time-entry input[type=text]:visible").nth(3).type("25");
+                await page.locator("form.time-entry input[type=text]:visible").nth(8).type("0:45");
+                // column 5 - contains invalid entry "0:99"
+                await page.locator("form.time-entry input[type=text]:visible").nth(4).type("2:15");
+                await page.locator("form.time-entry input[type=text]:visible").nth(9).type("0:99");
+
+                await page.locator("form.time-entry input[type=text]:visible").first().focus(); // triggers input/change event
 
             });
 
-            test.skip("Then the total for each day should be shown", async ({ page }) => {
+            test("Then the total for each day should be shown", async ({ page }) => {
 
-                await page.screenshot({ path: "screenshot.png" });
-                throw new Error("oops");
+                await expect(page.locator("form.time-entry .total_2022-08-01")).toContainText("5:45");
+                await expect(page.locator("form.time-entry .total_2022-08-02")).toContainText("");
+                await expect(page.locator("form.time-entry .total_2022-08-03")).toContainText("7:08");
+                await expect(page.locator("form.time-entry .total_2022-08-04")).toContainText("25:45");
+                await expect(page.locator("form.time-entry .total_2022-08-05")).toContainText("");
+
+            });
+
+            describe("but the page is refreshed", () => {
+
+                beforeEach(async ({ page }) => {
+
+                    await page.reload();
+
+                });
+
+                test("Then the input values should have been preserved", async ({ page }) => {
+
+                    await expect(page.locator(`form.time-entry input[name="31234567_2022-08-01"]`)).toHaveValue("3:30");
+
+                });
 
             });
 

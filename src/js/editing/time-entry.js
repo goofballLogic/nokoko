@@ -54,13 +54,15 @@ export default function render(message) {
 
     const valueFor = (projectId, dateOffset) => {
 
+        const name = nameFor(projectId, dateOffset);
+        return sessionStorage.getItem(name) || "";
         // const whenCode = offsetDate(dateOffset);
         // const found = editGroup.filter(e => e.date === whenCode && e.project.id === projectId);
 
     }
 
-    const projectSection = (selectedProjectId, className) => `
-        <tr${selectedProjectId ? ` data-projectid="${selectedProjectId}"` : ""}${className ? ` class=${className}` : ""}>
+    const projectSection = (selectedProjectId) => `
+        <tr${selectedProjectId ? ` data-projectid="${selectedProjectId}"` : ""}>
             <td>
                 <select name="project">
                     <option></option>
@@ -105,6 +107,14 @@ export default function render(message) {
                 ${Array.from(editProjectIds.keys()).map(projectSection).join("\n")}
                 ${projectSection("new", "new")}
             </tbody>
+            <tfoot>
+                <tr>
+                    <td>Daily totals:</td>
+                    ${Array.from("0123456").map((_, index) => `
+                        <td class="${nameFor("total", index)}"></td>
+                    `).join("\n")}
+                </tr>
+            </tfoot>
         </table>
         <button type="submit">Save</button>
 
@@ -131,7 +141,6 @@ export const events = {
                 .filter(input => window.getComputedStyle(input.parentElement).display !== "none")
             )
             .filter(list => list.length);
-
 
         switch (e.key) {
             case "Right":
@@ -170,8 +179,8 @@ export const events = {
                             inputGrid[newRowIndex][columnIndex].focus();
                         }
                     });
+                    break;
                 }
-                break;
             case "Up":
             case "ArrowUp":
                 {
@@ -182,8 +191,8 @@ export const events = {
                             inputGrid[newRowIndex][columnIndex].focus();
                         }
                     });
+                    break;
                 }
-
         }
 
     },
@@ -222,6 +231,50 @@ export const events = {
                     r.querySelector(`OPTION[value="${selectedProjectId}"]`)?.setAttribute("disabled", "");
                 }
             }
+
+            if (e.target.tagName === "INPUT") {
+
+                const timeEntryTexts = Array
+                    .from(document.querySelectorAll("table tbody tr td"))
+                    .map(cell => cell.querySelector("INPUT")?.value);
+
+                const footerCells = document.querySelectorAll("table tfoot tr:first-child td");
+
+                footerCells.forEach((footerCell, columnIndex) => {
+
+                    if (columnIndex < 1) return;
+                    const columnTexts = timeEntryTexts.filter((_, i) => i % 8 === columnIndex);
+                    const areNumericallyValid = columnTexts.every(text => !text || text.match(/^\d*$|^\d*:\d*$/));
+                    if (!areNumericallyValid) {
+
+                        footerCell.textContent = "";
+
+                    } else {
+
+                        const hoursAndMinutes = columnTexts
+                            .filter(text => text)
+                            .map(text => text.split(":").map(x => Number(x)));
+
+                        const areMinutesValid = hoursAndMinutes.every(([_, minutes]) => (minutes || 0) < 60);
+                        if (!areMinutesValid) {
+
+                            footerCell.textContent = "";
+
+                        } else {
+
+                            const totalMinutes = hoursAndMinutes.map(([hours, minutes]) => (hours || 0) * 60 + (minutes || 0)).reduce((x, y) => x + y, 0);
+                            const minutes = totalMinutes % 60;
+                            const hours = (totalMinutes - minutes) / 60;
+                            footerCell.textContent = totalMinutes ? minutes ? `${hours}:${minutes.leftPad("0", 2)}` : `${hours}` : "";
+
+                        }
+
+                    }
+
+                });
+
+            }
+
             return {
                 type: entrySlotsUpdated,
                 data: harvestFormData(form)

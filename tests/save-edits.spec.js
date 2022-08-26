@@ -175,6 +175,14 @@ describe("Background", () => {
 
             });
 
+            describe("CORS stuff", () => {
+
+                test.skip("should cope", () => {
+
+                });
+
+            });
+
             describe("but the server is throttling every other request", () => {
 
                 let throttleToggle;

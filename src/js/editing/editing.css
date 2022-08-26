@@ -57,3 +57,14 @@
     min-width: 150px;
     line-height: 30px;
 }
+
+.time-entry tfoot td {
+    line-height: 40px;
+    height: 40px;
+    border: none;
+    text-align: center;
+    color: #333;
+    background-color: #F7F7F7;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+}

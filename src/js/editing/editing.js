@@ -1,6 +1,6 @@
 import { loadCSS } from "../css-loader.js";
 import Element from "../lib/Element.js";
-import { accessTokenRejected, accessTokenValidated, entriesGrouped, entriesGrouped_groupedEntries, entrySlotsRendered } from "../messages.js";
+import { accessTokenRejected, accessTokenValidated, entriesGrouped, entriesGrouped_groupedEntries, entrySlotsRendered, entrySlotsUpdated } from "../messages.js";
 import JSONFetcher from "../lib/JSONFetcher.js";
 import Gather from "../lib/Gather.js";
 import Calculator from "../lib/Calculator.js";
@@ -77,6 +77,18 @@ export default [
         messages: [entrySlotsRendered],
         object: () => {
             document.querySelectorAll("form.time-entry input.time-entry")[1]?.focus()
+        }
+    }),
+
+    Filter({
+        messages: [entrySlotsUpdated],
+        object: message => {
+            const project = message.data.project.filter(x => x);
+            for (let [key, value] of Object.entries(message.data)) {
+                if (project.some(p => key.startsWith(p))) {
+                    sessionStorage.setItem(key, value);
+                };
+            }
         }
     })
 
