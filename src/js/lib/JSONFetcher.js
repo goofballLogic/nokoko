@@ -132,9 +132,10 @@ async function fetchWithRetry({ url, method, headers, body }) {
     let statusFloor = 0;
     let retries = 0;
     let resp;
-    const isResolved = () => (statusFloor !== 200) && (statusFloor !== 500);
-    const shouldRetry = () => isResolved() && (retries < retryLimit);
-    while (shouldRetry()) {
+    const isNotResolved = () => (statusFloor !== 200) && (statusFloor !== 500);
+    const shouldRetry = () => isNotResolved() && (retries < retryLimit);
+    const canStillTry = () => retries <= retryLimit;
+    while (isNotResolved() && canStillTry()) {
 
         try {
 
@@ -144,6 +145,7 @@ async function fetchWithRetry({ url, method, headers, body }) {
 
         } catch (err) {
 
+            console.warn("Error", body);
             statusFloor = -1;
 
         } finally {
@@ -153,8 +155,13 @@ async function fetchWithRetry({ url, method, headers, body }) {
         }
         if (shouldRetry()) {
 
+            console.warn("Will retry", body);
             retries++;
             await new Promise(resolve => setTimeout(resolve, backoff));
+
+        } else if (isNotResolved()) {
+
+            console.warn("Giving up on", body);
 
         }
 

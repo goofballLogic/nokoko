@@ -175,26 +175,17 @@ describe("Background", () => {
 
             });
 
-            describe("CORS stuff", () => {
+            describe("but the server is throttling nine out of ten requests (thanks Noko....)", () => {
 
-                test.skip("should cope", () => {
-
-                });
-
-            });
-
-            describe("but the server is throttling every other request", () => {
-
-                let throttleToggle;
+                let counter = 0;
                 let dispose;
 
                 beforeEach(({ context }) => {
 
-                    throttleToggle = false;
                     dispose = decorateAPIRequests(context, (_req, route) => {
 
-                        throttleToggle = !throttleToggle;
-                        if (throttleToggle) {
+                        const shouldThrottle = !!(counter++ % 10);
+                        if (shouldThrottle) {
 
                             route.fulfill({ body: "You are throttled", status: 409 });
                             return true;

@@ -10,7 +10,7 @@ describe("Background", () => {
 
     });
 
-    describe.only("When entries have loaded", () => {
+    describe("When entries have loaded", () => {
 
         beforeEach(async ({ page }) => {
 

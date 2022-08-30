@@ -50,6 +50,7 @@ const config = {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
+        screenshot: "only-on-failure"
       },
     },
 
@@ -57,6 +58,7 @@ const config = {
       name: 'firefox',
       use: {
         ...devices['Desktop Firefox'],
+        screenshot: "only-on-failure"
       },
     },
 
@@ -64,6 +66,7 @@ const config = {
       name: 'webkit',
       use: {
         ...devices['Desktop Safari'],
+        screenshot: "only-on-failure"
       },
     },
 
@@ -104,6 +107,7 @@ const config = {
   //   command: 'npm run start',
   //   port: 3000,
   // },
+
 };
 
 module.exports = config;
