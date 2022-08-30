@@ -100,7 +100,7 @@ describe("Background", () => {
 
                 });
 
-                test("Then it should submit all the entries", async ({ page }) => {
+                test("Then it should submit all the entries", async () => {
 
                     const actualBodies = POSTrequests
                         .filter(r => r.url.toString() === "https://api.nokotime.com/v2/entries")
@@ -113,6 +113,22 @@ describe("Background", () => {
                         } else {
                             expect(actualBodies).not.toContainEqual(expected);
                         }
+
+                    });
+
+                });
+
+                describe.only("And I press the OK button on the save complete dialog", () => {
+
+                    beforeEach(async ({ page }) => {
+
+                        await page.locator(`dialog.save-complete button:has-text("OK")`).click();
+
+                    });
+
+                    test("Then the dialog should close", async ({ page }) => {
+
+                        await page.locator("dialog.save-complete").waitFor({ state: "detached" });
 
                     });
 

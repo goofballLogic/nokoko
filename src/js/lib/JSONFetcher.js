@@ -161,7 +161,8 @@ async function fetchWithRetry({ url, method, headers, body }) {
 
         } else if (isNotResolved()) {
 
-            console.warn("Giving up on", body);
+            console.warn("Giving up on", body, "after", retries, "retries");
+            break;
 
         }
 
