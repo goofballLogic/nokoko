@@ -57,7 +57,7 @@ body > :not(aside.auth) {
 
   dialog {
     position: relative;
-    padding-bottom: 20px;
+    padding: 50px;
   }
 
   dialog .controls {

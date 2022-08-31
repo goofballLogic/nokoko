@@ -2,13 +2,22 @@ dialog.save-failure, dialog.save-success, dialog.save-in-progress {
     min-width: 400px;
     min-height: 300px;
     text-align: center;
-    border: solid 1px silver;
     border-radius: 10px;
-    box-shadow: 0 0 50px 0 black;
+    box-shadow: 0 0 50px 0 silver;
     top: 100px;
     margin-top: initial !important;
+    border: none;
 }
 
 dialog.save-failure {
-    border: solid 2px red;
+    background-color: #FEE;
+}
+dialog.save-failure::before {
+    display: block;
+    position: absolute;
+    content: "ERROR";
+    font-weight: bold;
+    color: red;
+    top: 10px;
+    left: 10px;
 }
