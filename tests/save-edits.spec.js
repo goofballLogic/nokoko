@@ -118,7 +118,7 @@ describe("Background", () => {
 
                 });
 
-                describe.only("And I press the OK button on the save complete dialog", () => {
+                describe("And I press the OK button on the save complete dialog", () => {
 
                     beforeEach(async ({ page }) => {
 
