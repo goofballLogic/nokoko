@@ -8,7 +8,7 @@
     <script>
         insights.init("rtTqHlnc9Bu1WN2n");
         insights.track({ id: "page-url", parameters: { "url": location.href } });
-        insights.trackPages();
+        insights.trackPages({ hash: true, search: true });
     </script>
     <script type="module" defer>
         import main from "./js/main.js";
